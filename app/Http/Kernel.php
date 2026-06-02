@@ -64,12 +64,6 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'preventBackAfterLogout' => \App\Http\Middleware\PreventBackAfterLogout::class,
-<<<<<<< HEAD
 
     ];
-=======
-        'plan.limit' => \App\Http\Middleware\CheckPlanLimit::class,
-    ];
-
->>>>>>> c57bb21 (subscription module)
 }

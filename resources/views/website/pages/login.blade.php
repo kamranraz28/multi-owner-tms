@@ -1,12 +1,3 @@
-<<<<<<< HEAD
-=======
-@extends('website.layouts.app')
-
-@section('title', 'Login page')
-
-@section('content')
-
->>>>>>> c57bb21 (subscription module)
 <section id="login-section" style="min-height:100vh; display:flex; align-items:center; justify-content:center; padding:80px 20px; background:#f8fafc;">
 
     <div style="width:100%; max-width:420px;" class="fu d1">
@@ -29,11 +20,7 @@
         <!-- Card -->
         <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:18px; padding:26px; box-shadow:0 20px 40px rgba(15,23,42,0.06);">
 
-<<<<<<< HEAD
             <form method="POST" action="{{ route('login') }}">
-=======
-            <form method="POST" action="{{ route('website.login.submit') }}">
->>>>>>> c57bb21 (subscription module)
             @csrf
 
             <!-- Email -->
@@ -86,8 +73,3 @@
     </div>
 
 </section>
-<<<<<<< HEAD
-=======
-
-@endsection
->>>>>>> c57bb21 (subscription module)

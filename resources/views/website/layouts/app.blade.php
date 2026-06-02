@@ -10,11 +10,7 @@
     <!-- Fonts: Bricolage Grotesque (display) + Plus Jakarta Sans (body) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,700;12..96,800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
-<<<<<<< HEAD
 
-=======
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
->>>>>>> c57bb21 (subscription module)
     <style>
         :root {
             --brand:        #1a56db;
@@ -297,7 +293,6 @@
            SECTION WRAPPER
         ══════════════════════════════════════ */
         .section-wrap { max-width: 1280px; margin: 0 auto; padding: 0 28px; }
-<<<<<<< HEAD
         .section-header { text-align: center; margin-bottom: 52px; }
         .section-tag {
             display: inline-flex; align-items: center; gap: 6px;
@@ -312,27 +307,10 @@
             color: var(--ink); letter-spacing: -0.04em; margin-bottom: 12px; line-height: 1.15;
         }
         .section-sub { font-size: 16px; color: var(--muted); max-width: 500px; margin: 0 auto; line-height: 1.7; }
-=======
-        .section-header { text-align: center; margin-bottom: 36px; } /* Reduced from 52px */
-        .section-tag {
-            display: inline-flex; align-items: center; gap: 4px; /* Reduced gap */
-            padding: 3px 10px; border-radius: 80px; /* Reduced padding */
-            background: var(--brand-light); border: 1px solid var(--brand-border); /* Reduced border */
-            font-size: 9px; font-weight: 800; color: var(--brand); /* Reduced font size */
-            letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 8px; /* Reduced margin */
-        }
-        .section-title {
-            font-family: 'Bricolage Grotesque', sans-serif;
-            font-size: clamp(1.5rem, 3vw, 2.2rem); font-weight: 800; /* Reduced font size */
-            color: var(--ink); letter-spacing: -0.03em; margin-bottom: 8px; line-height: 1.2; /* Reduced margin */
-        }
-        .section-sub { font-size: 14px; color: var(--muted); max-width: 500px; margin: 0 auto; line-height: 1.6; } /* Reduced font size */
->>>>>>> c57bb21 (subscription module)
 
         /* ══════════════════════════════════════
            PLAN CARDS
         ══════════════════════════════════════ */
-<<<<<<< HEAD
         #plans-section { padding: 80px 0; }
 
         .plans-grid {
@@ -341,119 +319,6 @@
         }
         @media (max-width: 1100px) { .plans-grid { grid-template-columns: 1fr; max-width: 500px; margin: 0 auto; } }
         @media (min-width: 640px) and (max-width: 1099px) { .plans-grid { grid-template-columns: repeat(2, 1fr); max-width: 800px; margin: 0 auto; } }
-=======
-         #plans-section { padding: 80px 0; }
-
-        /* CUSTOM: Fixed size plan cards (300px x 500px) */
-        .plan-card {
-            width: 300px !important;
-            height: 500px !important;
-            padding: 24px 22px !important;
-            display: flex;
-            flex-direction: column;
-            overflow: visible !important;
-        }
-        .plan-card:hover {
-            transform: translateY(-4px);
-        }
-        .plan-name {
-            font-size: 22px !important;
-            margin-bottom: 3px;
-        }
-        .plan-tagline {
-            font-size: 13px !important;
-            margin-bottom: 12px !important;
-            line-height: 1.4;
-        }
-        .price-main {
-            font-size: 42px !important;
-        }
-        .price-main .currency {
-            font-size: 20px !important;
-        }
-        .price-cycle {
-            font-size: 12px !important;
-            margin-bottom: 0;
-        }
-        .trial-badge {
-            font-size: 11px !important;
-            padding: 3px 9px !important;
-            margin-bottom: 12px !important;
-        }
-        .chip-grid {
-            gap: 6px !important;
-            margin-bottom: 10px !important;
-        }
-        .chip-card {
-            padding: 8px 10px !important;
-        }
-        .chip-val {
-            font-size: 18px !important;
-        }
-        .chip-label {
-            font-size: 9px !important;
-        }
-        .feat-list {
-            gap: 6px !important;
-            flex: 1 1 auto !important;
-            min-height: 0 !important;
-            overflow-y: auto !important;
-            scrollbar-width: thin;
-            margin-bottom: 0 !important;
-            padding-right: 2px;
-        }
-        .feat-list::-webkit-scrollbar {
-            width: 3px;
-        }
-        .feat-list::-webkit-scrollbar-thumb {
-            background: var(--border-2);
-            border-radius: 4px;
-        }
-        .feat-row {
-            font-size: 12.5px !important;
-            gap: 7px !important;
-        }
-        .feat-ico {
-            width: 18px !important;
-            height: 18px !important;
-            flex-shrink: 0;
-        }
-        .plan-divider {
-            margin: 10px 0 !important;
-            border-top-width: 1px !important;
-        }
-        .btn-plan {
-            padding: 12px !important;
-            font-size: 13px !important;
-            margin-top: auto;
-        }
-        .btn-sub-note {
-            font-size: 11px !important;
-            margin-top: 6px;
-        }
-        .plan-icon {
-            width: 48px !important;
-            height: 48px !important;
-            border-radius: 12px !important;
-            margin-bottom: 10px !important;
-        }
-        .plan-icon i {
-            font-size: 22px !important;
-        }
-        .popular-badge {
-            font-size: 10px !important;
-            padding: 4px 14px 6px !important;
-        }
-
-        .plans-grid {
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            gap: 24px;
-            flex-wrap: wrap;
-        }
-        @media (max-width: 1100px) { .plans-grid { flex-direction: column; align-items: center; } }
->>>>>>> c57bb21 (subscription module)
 
         .plan-card {
             background: var(--card); border: 1.5px solid var(--border);
@@ -594,11 +459,7 @@
         /* ══════════════════════════════════════
            FEATURE HIGHLIGHTS
         ══════════════════════════════════════ */
-<<<<<<< HEAD
         #features-section { padding: 0 0 80px; }
-=======
-        #features-section { padding: 0 0 0px; }
->>>>>>> c57bb21 (subscription module)
 
         .feat-highlights-grid {
             display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
@@ -794,7 +655,6 @@
 </head>
 <body>
 
-<<<<<<< HEAD
 <!-- ════════════════════════════════════════════
      ANNOUNCEMENT RIBBON
 ════════════════════════════════════════════ -->
@@ -806,23 +666,10 @@
         <i data-lucide="x" style="width:16px;height:16px;"></i>
     </button>
 </div>
-=======
-@include('website.partials.navbar')
-
-@yield('content')
-
-@include('website.partials.footer')
-
-<!-- ════════════════════════════════════════════
-     ANNOUNCEMENT RIBBON
-════════════════════════════════════════════ -->
-
->>>>>>> c57bb21 (subscription module)
 
 <!-- ════════════════════════════════════════════
      NAVBAR
 ════════════════════════════════════════════ -->
-<<<<<<< HEAD
 <header class="navbar" id="main-nav">
     <div class="nav-inner">
 
@@ -879,16 +726,11 @@
         <button class="btn-signup" style="width:100%;padding:14px;font-size:14px;justify-content:center;">Get started <i data-lucide="arrow-right" style="width:15px;height:15px;"></i></button>
     </div>
 </div>
-=======
-
-<!-- Mobile Nav -->
->>>>>>> c57bb21 (subscription module)
 
 
 <!-- ════════════════════════════════════════════
      HERO
 ════════════════════════════════════════════ -->
-<<<<<<< HEAD
 <section class="hero">
     <div class="fu d0">
         <div class="hero-eyebrow">
@@ -942,14 +784,10 @@
     </span>
     </div>
 </section>
-=======
-
->>>>>>> c57bb21 (subscription module)
 
 <!-- ════════════════════════════════════════════
      STATS ROW
 ════════════════════════════════════════════ -->
-<<<<<<< HEAD
 <div class="stats-row">
     <div class="stats-inner">
         <div class="stat-block">
@@ -970,15 +808,11 @@
         </div>
     </div>
 </div>
-=======
-
->>>>>>> c57bb21 (subscription module)
 
 
 <!-- ════════════════════════════════════════════
      PLANS
 ════════════════════════════════════════════ -->
-<<<<<<< HEAD
 <section id="plans-section" style="padding: 88px 0 80px;">
     <div class="section-wrap">
         <div class="section-header">
@@ -1130,15 +964,11 @@
         </div><!-- /plans-grid -->
     </div>
 </section>
-=======
-
->>>>>>> c57bb21 (subscription module)
 
 
 <!-- ════════════════════════════════════════════
      FEATURE HIGHLIGHTS
 ════════════════════════════════════════════ -->
-<<<<<<< HEAD
 <section id="features-section">
     <div class="section-wrap" style="padding-bottom: 80px;">
         <div class="section-header">
@@ -1181,15 +1011,11 @@
         </div>
     </div>
 </section>
-=======
-
->>>>>>> c57bb21 (subscription module)
 
 
 <!-- ════════════════════════════════════════════
      COMPARISON TABLE
 ════════════════════════════════════════════ -->
-<<<<<<< HEAD
 <section id="compare-section">
     <div class="section-wrap" style="padding-bottom: 80px;">
         <div class="section-header">
@@ -1271,15 +1097,11 @@
         </div>
     </div>
 </section>
-=======
-
->>>>>>> c57bb21 (subscription module)
 
 
 <!-- ════════════════════════════════════════════
      FAQ
 ════════════════════════════════════════════ -->
-<<<<<<< HEAD
 <section id="faq-section">
     <div class="section-wrap" style="padding-bottom:80px;">
         <div class="section-header">
@@ -1328,15 +1150,11 @@
         </div>
     </div>
 </section>
-=======
-
->>>>>>> c57bb21 (subscription module)
 
 
 <!-- ════════════════════════════════════════════
      CTA BAND
 ════════════════════════════════════════════ -->
-<<<<<<< HEAD
 <div class="cta-section">
     <div class="cta-inner">
         <h2>Ready to manage smarter?</h2>
@@ -1353,15 +1171,11 @@
         </div>
     </div>
 </div>
-=======
-
->>>>>>> c57bb21 (subscription module)
 
 
 <!-- ════════════════════════════════════════════
      FOOTER
 ════════════════════════════════════════════ -->
-<<<<<<< HEAD
 <footer class="site-footer">
     <div class="footer-main">
 
@@ -1421,9 +1235,6 @@
         </div>
     </div>
 </footer>
-=======
-
->>>>>>> c57bb21 (subscription module)
 
 
 <!-- ════════════════════════════════════════════
@@ -1456,13 +1267,8 @@
 
     // Billing toggle
     const prices = {
-<<<<<<< HEAD
         monthly: { basic: '999',   pro: '2,499',  ent: '6,999'  },
         yearly:  { basic: '799',   pro: '1,999',  ent: '5,599'  },
-=======
-        monthly: { basic: '999',   silver: '2,499',  gold: '6,999'  },
-        yearly:  { basic: '799',   silver: '1,999',  gold: '5,599'  },
->>>>>>> c57bb21 (subscription module)
     };
 
     function setBilling(mode) {
@@ -1472,11 +1278,7 @@
 
         const p = isYearly ? prices.yearly : prices.monthly;
         const allPrices = document.querySelectorAll('.pm-price');
-<<<<<<< HEAD
         const vals = [p.basic, p.pro, p.ent];
-=======
-        const vals = [p.basic, p.silver, p.gold];
->>>>>>> c57bb21 (subscription module)
         allPrices.forEach((el, i) => { if (vals[i]) el.textContent = vals[i]; });
 
         document.querySelectorAll('.cycle-word').forEach(el => {

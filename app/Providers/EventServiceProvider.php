@@ -2,11 +2,6 @@
 
 namespace App\Providers;
 
-<<<<<<< HEAD
-=======
-use App\Events\UserRegistered;
-use App\Listeners\SendWelcomeEmail;
->>>>>>> c57bb21 (subscription module)
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -29,12 +24,6 @@ class EventServiceProvider extends ServiceProvider
     \App\Events\SingleInvoiceLinkRequested::class => [
         \App\Listeners\SendSingleInvoiceLinkSms::class,
     ],
-<<<<<<< HEAD
-=======
-        UserRegistered::class => [
-            SendWelcomeEmail::class,   // এই listener চলেব
-        ],
->>>>>>> c57bb21 (subscription module)
     ];
 
     /**

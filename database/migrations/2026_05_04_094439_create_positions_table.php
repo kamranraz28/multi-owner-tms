@@ -16,10 +16,6 @@ class CreatePositionsTable extends Migration
         Schema::create('positions', function (Blueprint $table) {
             $table->id();
             $table->string('name')->nullable();
-<<<<<<< HEAD
-=======
-            $table->unsignedBigInteger('organization_id')->nullable();
->>>>>>> c57bb21 (subscription module)
             $table->integer('status')->default(1);
             $table->timestamps();
         });

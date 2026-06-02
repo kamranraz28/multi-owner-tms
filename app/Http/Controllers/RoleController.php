@@ -45,16 +45,14 @@ class RoleController extends Controller
         ]);
 
         $role = Role::findOrFail($id);
-<<<<<<< HEAD
+
         $role->syncPermissions($request->permissions);
-        
-=======
+
         $role->name = $request->name;
         $role->save();
 
         $role->syncPermissions($request->permissions ?? []);
 
->>>>>>> c57bb21 (subscription module)
         return redirect()->route('roles.index')->with('success', 'Permissions updated successfully.');
     }
 

@@ -19,10 +19,6 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-<<<<<<< HEAD
-=======
-            $table->unsignedBigInteger('organization_id')->nullable();
->>>>>>> c57bb21 (subscription module)
             $table->rememberToken();
             $table->timestamps();
         });

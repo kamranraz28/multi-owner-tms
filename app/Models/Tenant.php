@@ -18,10 +18,6 @@ class Tenant extends Model
         'property_id',
         'status',
         'invoicing',
-<<<<<<< HEAD
-=======
-        'organization_id',
->>>>>>> c57bb21 (subscription module)
         'invoice_month',
     ];
 

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-<<<<<<< HEAD
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserProfileRequest;
 use App\Http\Requests\UpdateUserRequest;
@@ -12,23 +11,6 @@ use App\Models\Settings;
 use App\Models\Tenant;
 use App\Services\UserService;
 use Illuminate\Http\Request;
-=======
-use App\Events\UserRegistered;
-use App\Http\Requests\StoreUserRequest;
-use App\Http\Requests\UpdateUserProfileRequest;
-use App\Http\Requests\UpdateUserRequest;
-use App\Mail\WelcomeMail;
-use App\Models\Notification;
-use App\Models\Plan;
-use App\Models\Property;
-use App\Models\Settings;
-use App\Models\Subscription;
-use App\Models\Tenant;
-use App\Models\User;
-use App\Services\UserService;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
->>>>>>> c57bb21 (subscription module)
 use Spatie\Permission\Models\Role;
 
 
@@ -50,18 +32,10 @@ class UserController extends Controller
 
     public function dashboard()
     {
-<<<<<<< HEAD
         $tenants = Tenant::with(['payments', 'tenantServices'])->where('status', 1)->get();
         $tenantCount = Tenant::count();
         $activeTenants = $tenants->count();
         $totalProperties = Property::count();
-=======
-        $auth_id = auth()->id();
-        $tenants = Tenant::with(['payments', 'tenantServices'])->where('status', 1)->where('organization_id',$auth_id)->get();
-        $tenantCount = Tenant::where('organization_id',$auth_id)->count();
-        $activeTenants = $tenants->count();
-        $totalProperties = Property::where('organization_id',$auth_id)->count();
->>>>>>> c57bb21 (subscription module)
 
         $currentMonth = now()->format('Y-m'); // format like '2025-05'
 
@@ -89,7 +63,6 @@ class UserController extends Controller
 
         $thisMonth = now()->format('F Y'); // Get current month name and year
 
-<<<<<<< HEAD
         return view('dashboard', compact(
             'tenants',
             'tenantCount',
@@ -102,33 +75,6 @@ class UserController extends Controller
             'totalRemainingValue',
             'thisMonth'
         ));
-=======
-
-        $userOrganizationId = User::where('id', $auth_id)
-            ->value('organization_id');
-
-        $subscriptions = Subscription::where('organization_id', $userOrganizationId)
-            ->get();
-        $organizationId = $subscriptions->first()->organization_id ?? null;
-
-        if ($organizationId){
-            return view('dashboard', compact(
-                'tenants',
-                'tenantCount',
-                'activeTenants',
-                'totalProperties',
-                'paidTenantsCount',
-                'unpaidTenantsCount',
-                'totalPayableValue',
-                'totalPaidValue',
-                'totalRemainingValue',
-                'thisMonth'
-            ));
-        }
-
-        $plans = Plan::where('is_active', 1)->get();
-        return view('website.plans.index', compact('plans'));
->>>>>>> c57bb21 (subscription module)
     }
 
 
@@ -140,12 +86,7 @@ class UserController extends Controller
 
     public function store(StoreUserRequest $request)
     {
-<<<<<<< HEAD
         $this->userService->storeUser($request);
-=======
-        $user = $this->userService->storeUser($request);
-        event(new UserRegistered($user));
->>>>>>> c57bb21 (subscription module)
         return redirect()->back()->with('success', 'User created and role assigned successfully!');
     }
 
@@ -198,10 +139,7 @@ class UserController extends Controller
     {
         $this->userService->updateSoftLogo($request);
         return redirect()->back()->with('success', 'Application logo has successfully changed.');
-<<<<<<< HEAD
 
-=======
->>>>>>> c57bb21 (subscription module)
     }
 
     public function colorChangeView()

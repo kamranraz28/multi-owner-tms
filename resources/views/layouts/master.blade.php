@@ -36,10 +36,6 @@
     @include('layouts.js') <!-- Include your JS files here -->
     @livewireScripts
 
-<<<<<<< HEAD
-=======
-
->>>>>>> c57bb21 (subscription module)
 </body>
 
 </html>

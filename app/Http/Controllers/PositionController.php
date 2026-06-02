@@ -11,12 +11,11 @@ class PositionController extends Controller
     public function index()
     {
         // Logic to list all positions
-<<<<<<< HEAD
+
         $positions = Position::all();
-=======
+
         $auth_id = auth()->id();
         $positions = Position::where('organization_id',$auth_id)->get();
->>>>>>> c57bb21 (subscription module)
         return view('positions.index', compact('positions'));
     }
     public function create()
@@ -30,11 +29,9 @@ class PositionController extends Controller
         $data = $request->validate([
             'name' => 'required|string|max:255',
         ]);
-<<<<<<< HEAD
 
-=======
         $data['organization_id'] = auth()->id();
->>>>>>> c57bb21 (subscription module)
+
         // Assuming you have a Position model
         Position::create($data);
 
@@ -43,10 +40,7 @@ class PositionController extends Controller
     public function edit($id)
     {
         // Logic to show the form for editing an existing position
-<<<<<<< HEAD
-=======
 
->>>>>>> c57bb21 (subscription module)
         $position = Position::findOrFail($id);
         return view('positions.edit', compact('position'));
     }
@@ -56,11 +50,9 @@ class PositionController extends Controller
         $data = $request->validate([
             'name' => 'required|string|max:255',
         ]);
-<<<<<<< HEAD
 
-=======
         $data['organization_id'] = auth()->id();
->>>>>>> c57bb21 (subscription module)
+
         $position = Position::findOrFail($id);
         $position->update($data);
 

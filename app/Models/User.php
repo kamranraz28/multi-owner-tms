@@ -24,10 +24,6 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-<<<<<<< HEAD
-=======
-        'organization_id',
->>>>>>> c57bb21 (subscription module)
         'image',
     ];
 
@@ -50,12 +46,5 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-<<<<<<< HEAD
     
-=======
-    public function organization()
-    {
-        return $this->belongsTo(Organization::class);
-    }
->>>>>>> c57bb21 (subscription module)
 }

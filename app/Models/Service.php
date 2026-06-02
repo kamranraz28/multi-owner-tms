@@ -11,10 +11,6 @@ class Service extends Model
 
     protected $fillable = [
         'name',
-<<<<<<< HEAD
-=======
-        'organization_id',
->>>>>>> c57bb21 (subscription module)
         'description',
         'status',
     ];

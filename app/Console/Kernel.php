@@ -15,7 +15,6 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-<<<<<<< HEAD
         // $schedule->command('inspire')->hourly();
     }
 
@@ -24,13 +23,6 @@ class Kernel extends ConsoleKernel
      *
      * @return void
      */
-=======
-        $schedule->call(function () {
-            app(\App\Services\SubscriptionService::class)->expireTrials();
-        })->daily();
-    }
-
->>>>>>> c57bb21 (subscription module)
     protected function commands()
     {
         $this->load(__DIR__.'/Commands');

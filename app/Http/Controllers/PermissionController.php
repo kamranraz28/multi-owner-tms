@@ -7,10 +7,9 @@ use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission;
 use App\Models\Notification;
 use Illuminate\Support\Facades\Auth;
-<<<<<<< HEAD
-=======
+
 use Spatie\Permission\PermissionRegistrar;
->>>>>>> c57bb21 (subscription module)
+
 
 class PermissionController extends Controller
 {
@@ -47,10 +46,8 @@ class PermissionController extends Controller
     {
         $permission = Permission::findOrFail($id);
         $permission->update(['name' => $request->name]);
-<<<<<<< HEAD
-=======
+
         app(PermissionRegistrar::class)->forgetCachedPermissions();
->>>>>>> c57bb21 (subscription module)
         return redirect()->route('permissions.index');
     }
 

@@ -7,10 +7,8 @@ use App\Models\Costdetail;
 use App\Models\Payment;
 use App\Models\Tenant;
 use Illuminate\Http\Request;
-<<<<<<< HEAD
-=======
+
 use Illuminate\Support\Facades\Auth;
->>>>>>> c57bb21 (subscription module)
 use Illuminate\Support\Facades\Session;
 
 class ReportController extends Controller
@@ -18,10 +16,8 @@ class ReportController extends Controller
     //
     public function costs()
     {
-<<<<<<< HEAD
-=======
+
         $auth_user = auth()->id();
->>>>>>> c57bb21 (subscription module)
         $fromDate = Session::get('from_date');
         $toDate = Session::get('to_date');
 
@@ -64,13 +60,8 @@ class ReportController extends Controller
 
     public function payments()
     {
-<<<<<<< HEAD
-        $month = Session::get('month', now()->format('Y-m'));
-=======
-        $auth_id = auth()->id();
-//        $month = Session::get('month', now()->format('Y-m'));
         $month = Session::get('month') ?? now()->format('Y-m');
->>>>>>> c57bb21 (subscription module)
+        $auth_id = auth()->id();
         $tenantId = Session::get('tenant_id');
 
         $query = Tenant::with([
@@ -79,11 +70,9 @@ class ReportController extends Controller
             },
             'tenantServices',
             'property'
-<<<<<<< HEAD
-        ])->where('status', 1);
-=======
-        ])->where('status', 1)->where('organization_id',$auth_id);
->>>>>>> c57bb21 (subscription module)
+        ])
+            ->where('status', 1)
+            ->where('organization_id', $auth_id);
 
         if ($tenantId) {
             $query->where('id', $tenantId);
@@ -96,7 +85,6 @@ class ReportController extends Controller
             'currentMonth' => $month,
         ]);
     }
-
 
 
     public function filterPayments(Request $request)

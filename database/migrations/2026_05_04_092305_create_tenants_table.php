@@ -17,10 +17,6 @@ class CreateTenantsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('property_id')->nullable();
             $table->string('name')->nullable();
-<<<<<<< HEAD
-=======
-            $table->unsignedBigInteger('organization_id')->nullable();
->>>>>>> c57bb21 (subscription module)
             $table->string('phone',14)->unique()->nullable();
             $table->string('address');
             $table->string('nid_number',17)->nullable();

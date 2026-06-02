@@ -16,10 +16,6 @@ class CreateServicesTable extends Migration
         Schema::create('services', function (Blueprint $table) {
             $table->id();
             $table->string('name')->nullable();
-<<<<<<< HEAD
-=======
-            $table->unsignedBigInteger('organization_id')->nullable();
->>>>>>> c57bb21 (subscription module)
             $table->text('description')->nullable();
             $table->integer('status')->default(1);
             $table->timestamp('created_at')->useCurrent();

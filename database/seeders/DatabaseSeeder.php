@@ -28,11 +28,6 @@ class DatabaseSeeder extends Seeder
             NotificationsSeeder::class,
             CostsSeeder::class,
             CostDetailsSeeder::class,
-<<<<<<< HEAD
-=======
-            OrganizationSeeder::class,
-            PlanSeeder::class,
->>>>>>> c57bb21 (subscription module)
         ]);
     }
 }

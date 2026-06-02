@@ -121,16 +121,8 @@
                             Sign In
                         </button>
 
-<<<<<<< HEAD
                         <p class="text-muted mb-0">Forgot password?
                             <a href="{{ route('resetPassord') }}">Reset</a>
-=======
-                        <p class="text-muted mb-0">
-                            <a href="{{ route('register') }}" class="text-white">Register</a>
-                        </p>
-                        <p class="text-muted mb-0">Forgot password?
-                            <a href="{{ route('resetPassord') }}" class="text-white">Reset</a>
->>>>>>> c57bb21 (subscription module)
                         </p>
                     </form>
                 </div>

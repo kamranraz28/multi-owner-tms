@@ -46,7 +46,6 @@ class LoginController extends Controller
 
     public function sendOTP(Request $request)
     {
-<<<<<<< HEAD
         // Validate the email
         $request->validate([
             'email' => 'required|email|exists:users,email'
@@ -71,13 +70,12 @@ class LoginController extends Controller
                 $message->to($user->email);
                 $message->subject('Your OTP for Login');
             });
-            
+
 
             return redirect()->back()->with('success', 'An OTP has been sent to your email. Use this OTP as password and Login.');
         }
 
         return redirect()->back()->with('error', 'This email is not correct.');
-=======
         try {
 
             // user fetch
@@ -110,7 +108,6 @@ class LoginController extends Controller
             ]);
 
         }
->>>>>>> c57bb21 (subscription module)
     }
 
 }

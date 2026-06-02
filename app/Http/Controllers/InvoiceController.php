@@ -49,11 +49,9 @@ class InvoiceController extends Controller
     {
         $tenant = Tenant::findOrFail($id);
         event(new SingleInvoiceLinkRequested($tenant));
-<<<<<<< HEAD
+
 
         return redirect()->back()->with('success', 'Invoice link sent successfully via SMS.');
-=======
-        return redirect()->back()->with('success','Invoice link sent successfully via SMS.');
->>>>>>> c57bb21 (subscription module)
+//        return redirect()->back()->with('success','Invoice link sent successfully via SMS.');
     }
 }

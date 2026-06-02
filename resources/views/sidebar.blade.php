@@ -3,7 +3,6 @@
         <div class="navbar-content scroll-div">
 
             {{-- User Profile Section --}}
-<<<<<<< HEAD
             <div class="main-menu-header py-3 px-3 d-flex align-items-center" style="background-color: {{ $sidebarColor }};">
                 @if (Auth::user()->image !== null)
                     <img class="img-fluid rounded-circle border shadow-sm" src="{{ asset('storage/img/' . Auth::user()->image) }}"
@@ -11,19 +10,6 @@
                 @else
                     <img class="img-fluid rounded-circle border shadow-sm" src="{{ asset('assets/images/user/avatar-2.jpg') }}"
                         alt="User-Profile-Image" style="width: 50px; height: 50px;">
-=======
-            @auth
-            <div class="main-menu-header py-3 px-3 d-flex align-items-center"
-                 style="background-color: {{ $sidebarColor }};">
-                @if (Auth::user()->image !== null)
-                    <img class="img-fluid rounded-circle border shadow-sm"
-                         src="{{ asset('storage/img/' . Auth::user()->image) }}"
-                         alt="User-Profile-Image" style="width: 50px; height: 50px;">
-                @else
-                    <img class="img-fluid rounded-circle border shadow-sm"
-                         src="{{ asset('assets/images/user/avatar-2.jpg') }}"
-                         alt="User-Profile-Image" style="width: 50px; height: 50px;">
->>>>>>> c57bb21 (subscription module)
                 @endif
 
                 <div class="user-details ms-3">
@@ -38,23 +24,12 @@
                     </div>
                 </div>
             </div>
-<<<<<<< HEAD
-=======
-            @endauth
->>>>>>> c57bb21 (subscription module)
 
             {{-- Dropdown Links --}}
             <div class="collapse" id="nav-user-link">
                 <ul class="list-unstyled px-3 pb-3">
-<<<<<<< HEAD
                     <li class="list-group-item bg-transparent border-0 p-0"><a href="{{ route('viewProfie') }}"><i class="feather icon-user me-2"></i>View Profile</a></li>
                     <li class="list-group-item bg-transparent border-0 p-0"><a href="{{ route('userLogout') }}"><i class="feather icon-log-out me-2"></i>Logout</a></li>
-=======
-                    <li class="list-group-item bg-transparent border-0 p-0"><a href="{{ route('viewProfie') }}"><i
-                                class="feather icon-user me-2"></i>View Profile</a></li>
-                    <li class="list-group-item bg-transparent border-0 p-0"><a href="{{ route('userLogout') }}"><i
-                                class="feather icon-log-out me-2"></i>Logout</a></li>
->>>>>>> c57bb21 (subscription module)
                 </ul>
             </div>
 
@@ -73,7 +48,6 @@
                 </li>
 
                 @can('software_settings')
-<<<<<<< HEAD
                 <li class="nav-item pcoded-hasmenu">
                     <a href="#!" class="nav-link nav-toggle">
                         <span class="pcoded-micon"><i class="feather icon-settings"></i></span>
@@ -111,46 +85,6 @@
                         <li><a href="{{ route('tenants.index') }}">Tenants</a></li>
                     </ul>
                 </li>
-=======
-                    <li class="nav-item pcoded-hasmenu">
-                        <a href="#!" class="nav-link nav-toggle">
-                            <span class="pcoded-micon"><i class="feather icon-settings"></i></span>
-                            <span class="pcoded-mtext">Software Settings</span>
-                        </a>
-                        <ul class="pcoded-submenu submenu-animate" style="background-color: {{ $sidebarColor }};">
-                            <li><a href="{{ route('logoChangeView') }}">Application Logo</a></li>
-                            <li><a href="{{ route('colorChangeView') }}">Application Color</a></li>
-                        </ul>
-                    </li>
-                @endcan
-
-                @can('user_configuration')
-                    <li class="nav-item pcoded-hasmenu">
-                        <a href="#!" class="nav-link nav-toggle">
-                            <span class="pcoded-micon"><i class="feather icon-layout"></i></span>
-                            <span class="pcoded-mtext">User Configuration</span>
-                        </a>
-                        <ul class="pcoded-submenu submenu-animate" style="background-color: {{ $sidebarColor }};">
-                            <li><a href="{{ route('permissions.index') }}">Permissions</a></li>
-                            <li><a href="{{ route('roles.index') }}">Roles</a></li>
-                            <li><a href="{{ route('users.index') }}">Users</a></li>
-                        </ul>
-                    </li>
-                @endcan
-                @can('system_configuration')
-                    <li class="nav-item pcoded-hasmenu">
-                        <a href="#!" class="nav-link nav-toggle">
-                            <span class="pcoded-micon"><i class="feather icon-server"></i></span>
-                            <span class="pcoded-mtext">System Configuration</span>
-                        </a>
-                        <ul class="pcoded-submenu submenu-animate" style="background-color: {{ $sidebarColor }};">
-                            <li><a href="{{ route('services.index') }}">Services</a></li>
-                            <li><a href="{{ route('positions.index') }}">Positions</a></li>
-                            <li><a href="{{ route('properties.index') }}">Properties</a></li>
-                            <li><a href="{{ route('tenants.index') }}">Tenants</a></li>
-                        </ul>
-                    </li>
->>>>>>> c57bb21 (subscription module)
                 @endcan
 
                 <li class="nav-item">
@@ -159,11 +93,7 @@
                         <span class="pcoded-mtext">Costs</span>
                     </a>
                 </li>
-<<<<<<< HEAD
 
-=======
-                @can('sidebar_reports')
->>>>>>> c57bb21 (subscription module)
                 <li class="nav-item pcoded-hasmenu">
                     <a href="#!" class="nav-link nav-toggle">
                         <span class="pcoded-micon"><i class="feather icon-bar-chart-2"></i></span>
@@ -174,49 +104,6 @@
                         <li><a href="{{ route('reports.payments') }}">Payment Report</a></li>
                     </ul>
                 </li>
-<<<<<<< HEAD
-=======
-                @endcan
-
-                @can('organization_super_admin_sidebar')
-                    <li class="nav-item pcoded-hasmenu">
-                        <a href="javascript:void(0)" class="nav-link nav-toggle">
-                        <span class="pcoded-micon">
-                            <i class="feather icon-user"></i>
-                        </span>
-                            <span class="pcoded-mtext">Organizations</span>
-                        </a>
-
-                        <ul class="pcoded-submenu submenu-animate" style="background-color: {{ $sidebarColor }};">
-                            <li>
-                                <a href="{{ route('organizations.index') }}">
-                                    Organizations List
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                @endcan
-
-
-{{--                @can('organization_user_sidebar')--}}
-{{--                    <li class="nav-item pcoded-hasmenu">--}}
-{{--                        <a href="javascript:void(0)" class="nav-link nav-toggle">--}}
-{{--                            <span class="pcoded-micon">--}}
-{{--                                <i class="feather icon-users"></i>--}}
-{{--                            </span>--}}
-{{--                            <span class="pcoded-mtext">Organizations User</span>--}}
-{{--                        </a>--}}
-
-{{--                        <ul class="pcoded-submenu submenu-animate" style="background-color: {{ $sidebarColor }};">--}}
-{{--                            <li>--}}
-{{--                                <a href="{{ route('organizationUser.index') }}">--}}
-{{--                                    Organizations User List--}}
-{{--                                </a>--}}
-{{--                            </li>--}}
-{{--                        </ul>--}}
-{{--                    </li>--}}
-{{--                @endcan--}}
->>>>>>> c57bb21 (subscription module)
 
             </ul>
         </div>

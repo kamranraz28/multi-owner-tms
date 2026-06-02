@@ -14,7 +14,6 @@ class CostDetailsSeeder extends Seeder
     {
         DB::table('costdetails')->insert([
             [
-<<<<<<< HEAD
                 'id' => 1,
                 'cost_id' => 2,
                 'service_id' => 2,
@@ -51,20 +50,13 @@ class CostDetailsSeeder extends Seeder
                 'updated_at' => '2025-05-27 05:08:35',
             ],
             [
-=======
->>>>>>> c57bb21 (subscription module)
                 'id' => 5,
                 'cost_id' => 4,
                 'service_id' => 4,
                 'amount' => 100,
                 'memo_upload' => null,
-<<<<<<< HEAD
                 'created_at' => '2025-05-27 05:21:13',
                 'updated_at' => '2025-05-27 05:21:13',
-=======
-                'created_at' => '2025-05-26 23:21:13',
-                'updated_at' => '2025-05-26 23:21:13',
->>>>>>> c57bb21 (subscription module)
             ],
             [
                 'id' => 6,
@@ -72,13 +64,8 @@ class CostDetailsSeeder extends Seeder
                 'service_id' => 3,
                 'amount' => 1000,
                 'memo_upload' => null,
-<<<<<<< HEAD
                 'created_at' => '2025-05-27 05:21:13',
                 'updated_at' => '2025-05-27 05:21:13',
-=======
-                'created_at' => '2025-05-26 23:21:13',
-                'updated_at' => '2025-05-26 23:21:13',
->>>>>>> c57bb21 (subscription module)
             ],
             [
                 'id' => 7,
@@ -86,7 +73,6 @@ class CostDetailsSeeder extends Seeder
                 'service_id' => 2,
                 'amount' => 300,
                 'memo_upload' => null,
-<<<<<<< HEAD
                 'created_at' => '2025-05-27 05:21:13',
                 'updated_at' => '2025-05-27 05:21:13',
             ],
@@ -125,55 +111,6 @@ class CostDetailsSeeder extends Seeder
                 'memo_upload' => '1777893528_69f880989d8fb.pdf',
                 'created_at' => '2026-05-04 05:18:48',
                 'updated_at' => '2026-05-04 05:18:48',
-=======
-                'created_at' => '2025-05-26 23:21:13',
-                'updated_at' => '2025-05-26 23:21:13',
-            ],
-            [
-                'id' => 12,
-                'cost_id' => 5,
-                'service_id' => 3,
-                'amount' => 1000,
-                'memo_upload' => null,
-                'created_at' => '2026-05-12 04:25:46',
-                'updated_at' => '2026-05-12 04:25:46',
-            ],
-            [
-                'id' => 13,
-                'cost_id' => 4,
-                'service_id' => 3,
-                'amount' => 1,
-                'memo_upload' => null,
-                'created_at' => '2026-05-13 23:32:23',
-                'updated_at' => '2026-05-13 23:32:23',
-            ],
-            [
-                'id' => 14,
-                'cost_id' => 5,
-                'service_id' => 21,
-                'amount' => 10000,
-                'memo_upload' => null,
-                'created_at' => '2026-05-13 23:37:09',
-                'updated_at' => '2026-05-13 23:37:09',
-            ],
-            [
-                'id' => 15,
-                'cost_id' => 6,
-                'service_id' => 8,
-                'amount' => 2000,
-                'memo_upload' => '1778741374_6a05707ec68b3.png',
-                'created_at' => '2026-05-14 00:49:35',
-                'updated_at' => '2026-05-14 00:49:35',
-            ],
-            [
-                'id' => 16,
-                'cost_id' => 7,
-                'service_id' => 4,
-                'amount' => 500,
-                'memo_upload' => '1778741525_6a05711507b60.pdf',
-                'created_at' => '2026-05-14 00:52:05',
-                'updated_at' => '2026-05-14 00:52:05',
->>>>>>> c57bb21 (subscription module)
             ],
         ]);
     }

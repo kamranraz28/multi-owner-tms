@@ -18,11 +18,7 @@ class CreatePropertiesTable extends Migration
             $table->unsignedBigInteger('position_id')->nullable();
             $table->string('name')->nullable();
             $table->string('address')->nullable();
-<<<<<<< HEAD
 
-=======
-            $table->unsignedBigInteger('organization_id')->nullable();
->>>>>>> c57bb21 (subscription module)
             $table->integer('status')->default(1);
 
             $table->timestamp('created_at')->useCurrent();

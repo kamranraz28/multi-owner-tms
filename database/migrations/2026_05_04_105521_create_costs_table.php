@@ -15,10 +15,6 @@ class CreateCostsTable extends Migration
     {
         Schema::create('costs', function (Blueprint $table) {
             $table->id();
-<<<<<<< HEAD
-=======
-            $table->unsignedBigInteger('organization_id')->nullable();
->>>>>>> c57bb21 (subscription module)
             $table->date('date')->nullable();
             $table->integer('status')->default(1);
             $table->timestamps();

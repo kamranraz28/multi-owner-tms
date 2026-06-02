@@ -2,28 +2,6 @@
     <div class="m-header">
         <a class="mobile-menu" id="mobile-collapse" href="#!"><span></span></a>
         <a href="#!" class="b-brand">
-            <!-- ========   change your logo here   ============ -->
-            @php
-                $extensions = ['png', 'jpg', 'jpeg', 'gif']; // Add other extensions as needed
-                $filePath = '';
-                foreach ($extensions as $ext) {
-                    if (file_exists(public_path('storage/img/softwareLogo.' . $ext))) {
-                        $filePath = asset('storage/img/softwareLogo.' . $ext);
-                        break;
-                    }
-                }
-            @endphp
-
-            <img src="{{ $filePath }}" alt="Software Logo" class="logo">
-        </a>
-    </div>
-    <div class="collapse navbar-collapse">
-        <ul class="navbar-nav ml-auto">
-
-<<<<<<< HEAD
-=======
-            @auth
->>>>>>> c57bb21 (subscription module)
             <li>
                 <div class="dropdown drp-user">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -53,10 +31,6 @@
                     </div>
                 </div>
             </li>
-<<<<<<< HEAD
-=======
-            @endauth
->>>>>>> c57bb21 (subscription module)
         </ul>
     </div>
 </header>

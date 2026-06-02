@@ -21,15 +21,8 @@ class TenantserviceController extends Controller
     }
     public function create()
     {
-<<<<<<< HEAD
         $services = Service::all();
         $tenants = Tenant::all();
-=======
-        $auth_id = auth()->id();
-//        dd($auth_id);
-        $services = Service::where('organization_id',$auth_id)->get();
-        $tenants = Tenant::where('organization_id',$auth_id)->get();
->>>>>>> c57bb21 (subscription module)
         return view('tenantservices.create',compact('services', 'tenants'));
     }
     public function store(Request $request)
@@ -43,21 +36,11 @@ class TenantserviceController extends Controller
         Tenantservice::create($request->all());
         return redirect()->back()->with('success', 'Tenant Service created successfully.');
     }
-<<<<<<< HEAD
     public function edit($id)
     {
         $tenantService = Tenantservice::findOrFail($id);
         $services = Service::all();
         $tenants = Tenant::all();
-=======
-
-    public function edit($id)
-    {
-        $tenantService = Tenantservice::findOrFail($id);
-        $auth_id = auth()->id();
-        $services = Service::where('organization_id',$auth_id)->get();
-        $tenants = Tenant::where('organization_id',$auth_id)->get();
->>>>>>> c57bb21 (subscription module)
         return view('tenantservices.edit', compact('tenantService', 'services', 'tenants'));
     }
     public function update(Request $request, $id)
@@ -79,19 +62,10 @@ class TenantserviceController extends Controller
         return redirect()->back()->with('success', 'Tenant Service deleted successfully.');
     }
 
-<<<<<<< HEAD
     public function invoice()
     {
         event(new InvoiceLinkRequested());
 
-=======
-    // manually
-    public function invoice()
-    {
-        $ownerId = auth()->id();
-        $tenants = Tenant::where('organization_id', $ownerId)->get();
-        event(new InvoiceLinkRequested($tenants));
->>>>>>> c57bb21 (subscription module)
         return redirect()->back()->with('success', 'Invoice link sent successfully via SMS.');
     }
 }

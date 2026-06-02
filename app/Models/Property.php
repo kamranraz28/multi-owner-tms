@@ -13,10 +13,6 @@ class Property extends Model
         'name',
         'position_id',
         'address',
-<<<<<<< HEAD
-=======
-        'organization_id',
->>>>>>> c57bb21 (subscription module)
         'status',
     ];
 
