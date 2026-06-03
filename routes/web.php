@@ -15,9 +15,17 @@ use App\Models\User;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LoginController;
-
+use App\Http\Controllers\OrganizationController;
+use App\Http\Controllers\OrganizationUserController;
+use App\Http\Controllers\PlanController;
+use App\Http\Controllers\RegisterController;
 
 Route::get('', function () {
+    $plans = App\Models\Plan::where('is_active', true)->get();
+    return view('website.index', compact('plans'));
+})->name('home');
+
+Route::get('/login', function () {
     return view('login');
 })->name('login');
 
@@ -49,11 +57,11 @@ Route::get('/tenant/{tenant}/invoice/pdf', [InvoiceController::class, 'downloadP
 Route::middleware(['auth', 'preventBackAfterLogout'])->group(function () {
     // Protected routes
     Route::get('/dashboard', [UserController::class, 'dashboard'])->name('users.dashboard');
-
+    Route::post('/subscribe/{plan}', [PlanController::class, 'subscribe'])->name('subscribe');
 
     // For assigning roles to users
     Route::post('/assign-role', [RoleController::class, 'assignRole'])->name('assign.role');
-    Route::post('/store-user', [UserController::class, 'store'])->name('store.user');
+    Route::post('/store-user', [UserController::class, 'store'])->name('store.user')->middleware('plan.limit:users');
 
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
     Route::get('/user-create', [UserController::class, 'create'])->name('users.create');
@@ -88,37 +96,70 @@ Route::middleware(['auth', 'preventBackAfterLogout'])->group(function () {
     Route::post('/color-update', [UserController::class, 'updateColors'])->name('updateColors');
 
     Route::prefix('services')->name('services.')->group(function () {
-        Route::resource('/', ServiceController::class)->parameters(['' => 'service']);
+        Route::get('/', [ServiceController::class, 'index'])->name('index');
+        Route::get('/create', [ServiceController::class, 'create'])->name('create');
+        Route::post('/', [ServiceController::class, 'store'])->name('store');
+        Route::get('/{service}/edit', [ServiceController::class, 'edit'])->name('edit');
+        Route::put('/{service}', [ServiceController::class, 'update'])->name('update');
+        Route::delete('/{service}', [ServiceController::class, 'destroy'])->name('destroy');
     });
 
     Route::prefix('positions')->name('positions.')->group(function () {
-        Route::resource('/', PositionController::class)->parameters(['' => 'position']);
+        Route::get('/', [PositionController::class, 'index'])->name('index');
+        Route::get('/create', [PositionController::class, 'create'])->name('create');
+        Route::post('/', [PositionController::class, 'store'])->name('store');
+        Route::get('/{position}/edit', [PositionController::class, 'edit'])->name('edit');
+        Route::put('/{position}', [PositionController::class, 'update'])->name('update');
+        Route::delete('/{position}', [PositionController::class, 'destroy'])->name('destroy');
     });
 
-    Route::prefix('properties')->name('properties.')->group(function () {
-        Route::resource('/', PropertyController::class)->parameters(['' => 'property']);
+    Route::get('/properties', [PropertyController::class, 'index'])->name('properties.index');
+
+    Route::prefix('properties')->name('properties.')->middleware('plan.limit:properties')->group(function () {
+        Route::get('/create', [PropertyController::class, 'create'])->name('create');
+        Route::post('/', [PropertyController::class, 'store'])->name('store');
+        Route::get('/{property}/edit', [PropertyController::class, 'edit'])->name('edit');
+        Route::put('/{property}', [PropertyController::class, 'update'])->name('update');
+        Route::delete('/{property}', [PropertyController::class, 'destroy'])->name('destroy');
+    });
+    Route::get('/properties/{property}', [PropertyController::class, 'show'])->name('properties.show');
+
+    Route::get('/tenants', [TenantController::class, 'index'])->name('tenants.index');
+
+    Route::prefix('tenants')->name('tenants.')->middleware('plan.limit:tenants')->group(function () {
+        Route::get('/create', [TenantController::class, 'create'])->name('create');
+        Route::post('/', [TenantController::class, 'store'])->name('store');
+        Route::get('/{tenant}/edit', [TenantController::class, 'edit'])->name('edit');
+        Route::put('/{tenant}', [TenantController::class, 'update'])->name('update');
+        Route::delete('/{tenant}', [TenantController::class, 'destroy'])->name('destroy');
     });
 
-    Route::prefix('tenants')->name('tenants.')->group(function () {
-        Route::resource('/', TenantController::class)->parameters(['' => 'tenant']);
-    });
+    Route::get('/tenants/{tenant}', [TenantController::class, 'show'])->name('tenants.show');
 
     Route::get('/tenants/services/{id?}', [TenantserviceController::class, 'services'])->name('tenants.services');
 
     Route::prefix('tenantServices')->name('tenantServices.')->group(function () {
-        Route::resource('/', TenantserviceController::class)->parameters(['' => 'tenantService']);
+        Route::get('/create', [TenantserviceController::class, 'create'])->name('create');
+        Route::post('/', [TenantserviceController::class, 'store'])->name('store');
+        Route::get('/{tenantService}/edit', [TenantserviceController::class, 'edit'])->name('edit');
+        Route::put('/{tenantService}', [TenantserviceController::class, 'update'])->name('update');
+        Route::delete('/{tenantService}', [TenantserviceController::class, 'destroy'])->name('destroy');
     });
 
     Route::get('/invoice', [TenantserviceController::class, 'invoice'])->name('sendInvoice');
     Route::get('/invoice/change/{id?}', [InvoiceController::class, 'invoiceChange'])->name('invoice.change');
     Route::get('/invoice/send/{id?}', [InvoiceController::class, 'sendInvoice'])->name('invoice.send');
 
-
     Route::get('/month/change/{id?}', [TenantController::class, 'monthChange'])->name('month.change');
 
-
     Route::prefix('costs')->name('costs.')->group(function () {
-        Route::resource('/', CostController::class)->parameters(['' => 'cost']);
+        Route::get('/', [CostController::class, 'index'])->name('index');
+        Route::get('/create', [CostController::class, 'create'])->name('create');
+        Route::post('/', [CostController::class, 'store'])->name('store');
+        Route::get('/{cost}', [CostController::class, 'show'])->name('show');
+        Route::get('/{cost}/edit', [CostController::class, 'edit'])->name('edit');
+        Route::put('/{cost}', [CostController::class, 'update'])->name('update');
+        Route::delete('/{cost}', [CostController::class, 'destroy'])->name('destroy');
     });
 
     Route::prefix('reports')->name('reports.')->group(function () {
@@ -128,11 +169,29 @@ Route::middleware(['auth', 'preventBackAfterLogout'])->group(function () {
             Route::get('/payments', [ReportController::class, 'payments'])->name('payments');
             Route::post('/payments/filter', [ReportController::class, 'filterPayments'])->name('filterPayments');
             Route::get('/payments/reset', [ReportController::class, 'resetPayments'])->name('resetPayments');
-
-
     });
+
     Route::get('/tenant-payment/{tenant}/{month}', [ReportController::class, 'markPaid'])->name('tenant.payment');
     Route::get('/tenant-payment-reverse/{tenant}/{month}', [ReportController::class, 'reverse'])->name('tenant.paymentReverse');
 
+});
 
+// Plans & Subscription routes
+Route::get('/plans', [PlanController::class, 'index'])->name('plans');
+
+// Public routes
+Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
+Route::post('/register', [RegisterController::class, 'register'])->name('register.submit');
+
+// Organizations routes
+Route::middleware(['auth'])->group(function () {
+    Route::get('/organization', [OrganizationController::class, 'index'])->name('organizations.index');
+    Route::get('/organization/create', [OrganizationController::class, 'create'])->name('organizations.create');
+    Route::post('/organization/store', [OrganizationController::class, 'store'])->name('organizations.store');
+    Route::delete('/organization/{id}', [OrganizationController::class, 'destroy'])->name('organizations.destroy');
+    Route::get('/organization/{id}/edit', [OrganizationController::class, 'edit'])->name('organizations.edit');
+    Route::put('/organization/{id}', [OrganizationController::class, 'update'])->name('organizations.update');
+    Route::get('organization/user', [OrganizationUserController::class, 'index'])->name('organizationUser.index');
+    Route::get('organization/user/create', [OrganizationUserController::class, 'create'])->name('organizationUser.create');
+    Route::post('organization/user/store', [OrganizationUserController::class, 'store'])->name('organizationUser.store');
 });

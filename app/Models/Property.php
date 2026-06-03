@@ -14,6 +14,7 @@ class Property extends Model
         'position_id',
         'address',
         'status',
+        'organization_id',
     ];
 
     public function position()
@@ -24,6 +25,11 @@ class Property extends Model
     public function tenant()
     {
         return $this->hasOne(Tenant::class);
+    }
+
+    public function organization()
+    {
+        return $this->belongsTo(Organization::class);
     }
 
 }

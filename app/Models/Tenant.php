@@ -19,6 +19,7 @@ class Tenant extends Model
         'status',
         'invoicing',
         'invoice_month',
+        'organization_id',
     ];
 
     public function property()
@@ -34,6 +35,11 @@ class Tenant extends Model
     public function payments()
     {
         return $this->hasMany(Payment::class);
+    }
+
+    public function organization()
+    {
+        return $this->belongsTo(Organization::class);
     }
 
 }

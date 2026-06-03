@@ -72,7 +72,8 @@
                         <li><a href="{{ route('users.index') }}">Users</a></li>
                     </ul>
                 </li>
-
+                @endcan
+                @can('system_configuration')
                 <li class="nav-item pcoded-hasmenu">
                     <a href="#!" class="nav-link nav-toggle">
                         <span class="pcoded-micon"><i class="feather icon-server"></i></span>

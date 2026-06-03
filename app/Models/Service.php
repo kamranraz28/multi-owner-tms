@@ -13,6 +13,7 @@ class Service extends Model
         'name',
         'description',
         'status',
+        'organization_id',
     ];
 
     public function tenantServices()
@@ -23,4 +24,10 @@ class Service extends Model
     {
         return $this->hasMany(Costdetail::class);
     }
+
+    public function organization()
+    {
+        return $this->belongsTo(Organization::class);
+    }
+
 }

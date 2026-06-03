@@ -9,24 +9,26 @@ use Illuminate\Http\Request;
 
 class CostController extends Controller
 {
-    //
     public function index()
     {
-        // Logic to display costs
-        $costs = Cost::all(); // Fetch all costs from the database
-        return view('costs.index',compact('costs'));
+        $orgId = auth()->user()->organization_id;
+        $costs = Cost::where('organization_id', $orgId)->get();
+
+        return view('costs.index', compact('costs'));
     }
 
     public function create()
     {
-        // Logic to show the form for creating a new cost
-        $services = Service::all(); // Fetch all services for the dropdown
+        $orgId = auth()->user()->organization_id;
+        $services = Service::where('organization_id', $orgId)->get();
+
         return view('costs.create', compact('services'));
     }
 
-
     public function store(Request $request)
     {
+        $orgId = auth()->user()->organization_id;
+
         $request->validate([
             'date' => 'required|date',
             'service_id' => 'required|array',
@@ -37,16 +39,14 @@ class CostController extends Controller
             'voucher.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
         ]);
 
-        // Create the main Cost record
         $cost = Cost::create([
             'date' => $request->date,
+            'organization_id' => $orgId,
         ]);
 
-        // Loop through each cost detail
         foreach ($request->service_id as $index => $serviceId) {
             $voucherName = null;
 
-            // Only process if a file is uploaded for this index
             if ($request->hasFile("voucher.$index")) {
                 $voucherFile = $request->file("voucher.$index");
                 $voucherName = time() . '_' . uniqid() . '.' . $voucherFile->getClientOriginalExtension();
@@ -57,7 +57,7 @@ class CostController extends Controller
                 'cost_id' => $cost->id,
                 'service_id' => $serviceId,
                 'amount' => $request->amount[$index],
-                'memo_upload' => $voucherName, // nullable field
+                'memo_upload' => $voucherName,
             ]);
         }
 
@@ -66,21 +66,29 @@ class CostController extends Controller
 
     public function show($id)
     {
-        // Logic to display a specific cost
-        $cost = Cost::with('costDetails')->findOrFail($id);
+        $orgId = auth()->user()->organization_id;
+        $cost = Cost::with('costDetails')
+            ->where('organization_id', $orgId)
+            ->findOrFail($id);
+
         return view('costs.show', compact('cost'));
     }
 
     public function edit($id)
     {
-        // Logic to show the form for editing a specific cost
-        $cost = Cost::with('costDetails')->findOrFail($id);
-        $services = Service::all(); // Fetch all services for the dropdown
+        $orgId = auth()->user()->organization_id;
+        $cost = Cost::with('costDetails')
+            ->where('organization_id', $orgId)
+            ->findOrFail($id);
+        $services = Service::where('organization_id', $orgId)->get();
+
         return view('costs.edit', compact('cost', 'services'));
     }
 
     public function update(Request $request, $id)
     {
+        $orgId = auth()->user()->organization_id;
+
         $request->validate([
             'date' => 'required|date',
             'service_id' => 'required|array',
@@ -91,23 +99,19 @@ class CostController extends Controller
             'voucher.*' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
         ]);
 
-        // Find the cost record
-        $cost = Cost::findOrFail($id);
+        $cost = Cost::where('organization_id', $orgId)->findOrFail($id);
         $cost->date = $request->date;
         $cost->save();
 
-        // Update or create cost details
         foreach ($request->service_id as $index => $serviceId) {
             $voucherName = null;
 
-            // Check if a file is uploaded for this index
             if ($request->hasFile("voucher.$index")) {
                 $voucherFile = $request->file("voucher.$index");
                 $voucherName = time() . '_' . uniqid() . '.' . $voucherFile->getClientOriginalExtension();
                 $voucherFile->storeAs('public/vouchers', $voucherName);
             }
 
-            // Update or create the cost detail
             Costdetail::updateOrCreate(
                 ['cost_id' => $cost->id, 'service_id' => $serviceId],
                 ['amount' => $request->amount[$index], 'memo_upload' => $voucherName]
@@ -116,17 +120,14 @@ class CostController extends Controller
 
         return redirect()->route('costs.index')->with('success', 'Costs updated successfully.');
     }
+
     public function destroy($id)
     {
-        // Logic to delete a specific cost
-        $cost = Cost::findOrFail($id);
-        $cost->costDetails()->delete(); // Delete associated cost details
-        $cost->delete(); // Delete the cost record
+        $orgId = auth()->user()->organization_id;
+        $cost = Cost::where('organization_id', $orgId)->findOrFail($id);
+        $cost->costDetails()->delete();
+        $cost->delete();
 
         return redirect()->route('costs.index')->with('success', 'Cost deleted successfully.');
     }
-
-
-
-
 }

@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Plan;
 use App\Models\Subscription;
 use App\Models\SubscriptionHistory;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -54,21 +53,7 @@ class PlanController extends Controller
             ]);
         });
 
-        $auth_id = auth()->id();
-
-        $userOrganizationId = User::where('id', $auth_id)
-            ->value('organization_id');
-
-        $subscriptions = Subscription::where('organization_id', $userOrganizationId)
-            ->get();
-        $organizationId = $subscriptions->first()->organization_id ?? null;
-
-        if ($organizationId){
-            return redirect()->route('users.dashboard')->with('success', "Subscribed to {$plan->name} plan!");
-        }
-
-        $plans = Plan::where('is_active', 1)->get();
-        return view('website.plans.index', compact('plans'));
+        return redirect()->route('users.dashboard')->with('success', "Subscribed to {$plan->name} plan!");
     }
 
     public function index()

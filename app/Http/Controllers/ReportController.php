@@ -16,14 +16,15 @@ class ReportController extends Controller
     //
     public function costs()
     {
-
-        $auth_user = auth()->id();
+        $orgId = auth()->user()->organization_id;
         $fromDate = Session::get('from_date');
         $toDate = Session::get('to_date');
 
-        $costDetailQuery = Costdetail::with('cost');
+        $costDetailQuery = Costdetail::with('cost')
+            ->whereHas('cost', function ($query) use ($orgId) {
+                $query->where('organization_id', $orgId);
+            });
 
-        // Filter by related cost.date
         if ($fromDate) {
             $costDetailQuery->whereHas('cost', function ($query) use ($fromDate) {
                 $query->whereDate('date', '>=', $fromDate);
@@ -61,7 +62,7 @@ class ReportController extends Controller
     public function payments()
     {
         $month = Session::get('month') ?? now()->format('Y-m');
-        $auth_id = auth()->id();
+        $orgId = auth()->user()->organization_id;
         $tenantId = Session::get('tenant_id');
 
         $query = Tenant::with([
@@ -72,7 +73,7 @@ class ReportController extends Controller
             'property'
         ])
             ->where('status', 1)
-            ->where('organization_id', $auth_id);
+            ->where('organization_id', $orgId);
 
         if ($tenantId) {
             $query->where('id', $tenantId);

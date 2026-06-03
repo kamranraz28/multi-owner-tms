@@ -7,61 +7,60 @@ use Illuminate\Http\Request;
 
 class PositionController extends Controller
 {
-    //
     public function index()
     {
-        // Logic to list all positions
+        $orgId = auth()->user()->organization_id;
+        $positions = Position::where('organization_id', $orgId)->get();
 
-        $positions = Position::all();
-
-        $auth_id = auth()->id();
-        $positions = Position::where('organization_id',$auth_id)->get();
         return view('positions.index', compact('positions'));
     }
+
     public function create()
     {
-        // Logic to show the form for creating a new position
         return view('positions.create');
     }
+
     public function store(Request $request)
     {
-        // Logic to store a new position
+        $orgId = auth()->user()->organization_id;
+
         $data = $request->validate([
             'name' => 'required|string|max:255',
         ]);
 
-        $data['organization_id'] = auth()->id();
+        $data['organization_id'] = $orgId;
 
-        // Assuming you have a Position model
         Position::create($data);
 
         return redirect()->route('positions.index')->with('success', 'Position created successfully.');
     }
+
     public function edit($id)
     {
-        // Logic to show the form for editing an existing position
+        $orgId = auth()->user()->organization_id;
+        $position = Position::where('organization_id', $orgId)->findOrFail($id);
 
-        $position = Position::findOrFail($id);
         return view('positions.edit', compact('position'));
     }
+
     public function update(Request $request, $id)
     {
-        // Logic to update an existing position
+        $orgId = auth()->user()->organization_id;
+
         $data = $request->validate([
             'name' => 'required|string|max:255',
         ]);
 
-        $data['organization_id'] = auth()->id();
-
-        $position = Position::findOrFail($id);
+        $position = Position::where('organization_id', $orgId)->findOrFail($id);
         $position->update($data);
 
         return redirect()->route('positions.index')->with('success', 'Position updated successfully.');
     }
+
     public function destroy($id)
     {
-        // Logic to delete a position
-        $position = Position::findOrFail($id);
+        $orgId = auth()->user()->organization_id;
+        $position = Position::where('organization_id', $orgId)->findOrFail($id);
         $position->delete();
 
         return redirect()->route('positions.index')->with('success', 'Position deleted successfully.');

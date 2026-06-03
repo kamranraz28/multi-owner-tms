@@ -11,8 +11,12 @@ class InvoiceController extends Controller
 {
     public function show(Tenant $tenant)
     {
-        $tenant->load('tenantServices.service');
+        $orgId = auth()->user()->organization_id;
+        if ($tenant->organization_id !== $orgId) {
+            abort(403);
+        }
 
+        $tenant->load('tenantServices.service');
         $services = $tenant->tenantServices;
         $total = $services->sum('value');
 
@@ -21,7 +25,11 @@ class InvoiceController extends Controller
 
     public function downloadPdf(Tenant $tenant)
     {
-        //dd(1);
+        $orgId = auth()->user()->organization_id;
+        if ($tenant->organization_id !== $orgId) {
+            abort(403);
+        }
+
         $services = $tenant->tenantServices()->with('service')->get();
         $total = $services->sum('value');
 
@@ -37,8 +45,8 @@ class InvoiceController extends Controller
 
     public function invoiceChange($id)
     {
-        //dd($id);
-        $tenant = Tenant::findOrFail($id);
+        $orgId = auth()->user()->organization_id;
+        $tenant = Tenant::where('organization_id', $orgId)->findOrFail($id);
         $tenant->invoicing = !$tenant->invoicing;
         $tenant->save();
 
@@ -47,11 +55,10 @@ class InvoiceController extends Controller
 
     public function sendInvoice($id)
     {
-        $tenant = Tenant::findOrFail($id);
+        $orgId = auth()->user()->organization_id;
+        $tenant = Tenant::where('organization_id', $orgId)->findOrFail($id);
         event(new SingleInvoiceLinkRequested($tenant));
 
-
         return redirect()->back()->with('success', 'Invoice link sent successfully via SMS.');
-//        return redirect()->back()->with('success','Invoice link sent successfully via SMS.');
     }
 }

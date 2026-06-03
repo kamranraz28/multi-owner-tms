@@ -1,6 +1,6 @@
 @extends('website.layouts.app')
 
-@section('title', 'Login page')
+@section('title', 'Plans & Pricing')
 
 @section('content')
     <section id="plans-section" style="padding: 88px 0 80px;">

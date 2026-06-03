@@ -20,8 +20,10 @@ class UserService
 {
     public function getAllUsers()
     {
-
-        $users = User::with('roles')->get();
+        $orgId = Auth()->user()->organization_id;
+        $users = User::with('roles')
+            ->where('organization_id', $orgId)
+            ->get();
 
         return $users;
     }
@@ -29,11 +31,13 @@ class UserService
     public function storeUser(StoreUserRequest $request)
     {
         $id = Auth()->id();
+        $orgId = Auth()->user()->organization_id;
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'organization_id' => $orgId,
         ]);
 
         $user->assignRole($request->role);

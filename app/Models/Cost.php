@@ -12,10 +12,16 @@ class Cost extends Model
     protected $fillable = [
         'date',
         'status',
+        'organization_id',
     ];
     public function costDetails()
     {
         return $this->hasMany(Costdetail::class);
+    }
+
+    public function organization()
+    {
+        return $this->belongsTo(Organization::class);
     }
 
 }

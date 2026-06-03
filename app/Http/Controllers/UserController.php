@@ -32,10 +32,14 @@ class UserController extends Controller
 
     public function dashboard()
     {
-        $tenants = Tenant::with(['payments', 'tenantServices'])->where('status', 1)->get();
-        $tenantCount = Tenant::count();
+        $orgId = auth()->user()->organization_id;
+        $tenants = Tenant::with(['payments', 'tenantServices'])
+            ->where('organization_id', $orgId)
+            ->where('status', 1)
+            ->get();
+        $tenantCount = Tenant::where('organization_id', $orgId)->count();
         $activeTenants = $tenants->count();
-        $totalProperties = Property::count();
+        $totalProperties = Property::where('organization_id', $orgId)->count();
 
         $currentMonth = now()->format('Y-m'); // format like '2025-05'
 

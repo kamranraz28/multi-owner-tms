@@ -25,6 +25,7 @@ class User extends Authenticatable
         'email',
         'password',
         'image',
+        'organization_id',
     ];
 
     /**
@@ -45,6 +46,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    public function organization()
+    {
+        return $this->belongsTo(Organization::class);
+    }
 
-    
 }

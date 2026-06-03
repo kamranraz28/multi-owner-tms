@@ -8,72 +8,80 @@ use Illuminate\Http\Request;
 
 class PropertyController extends Controller
 {
-    //
     public function index()
     {
-        // Logic to list all properties
-
-        $properties = Property::with('position')->get();
-
-        $auth_user = auth()->id();
-        $properties = Property::where('organization_id',$auth_user)->get();
+        $orgId = auth()->user()->organization_id;
+        $properties = Property::with('position')
+            ->where('organization_id', $orgId)
+            ->get();
 
         return view('properties.index', compact('properties'));
     }
 
+    public function show($id)
+    {
+        $orgId = auth()->user()->organization_id;
+        $property = Property::with('position', 'tenant')
+            ->where('organization_id', $orgId)
+            ->findOrFail($id);
+
+        return view('properties.show', compact('property'));
+    }
+
     public function create()
     {
-        // Logic to show the form for creating a new property
-
-        $positions = Position::all();
-
-        $auth_user = auth()->id();
-        $positions = Position::where('organization_id',$auth_user)->get();
+        $orgId = auth()->user()->organization_id;
+        $positions = Position::where('organization_id', $orgId)->get();
 
         return view('properties.create', compact('positions'));
     }
+
     public function store(Request $request)
     {
-        // Logic to store a new property
+        $orgId = auth()->user()->organization_id;
+
         $data = $request->validate([
             'name' => 'required|string|max:255',
             'position_id' => 'required|exists:positions,id',
             'address' => 'nullable|string|max:255',
         ]);
 
-        $data['organization_id'] = auth()->id();
+        $data['organization_id'] = $orgId;
 
         Property::create($data);
 
         return redirect()->route('properties.index')->with('success', 'Property created successfully.');
     }
+
     public function edit($id)
     {
-        // Logic to show the form for editing an existing property
-        $property = Property::findOrFail($id);
-        $positions = Position::all();
+        $orgId = auth()->user()->organization_id;
+        $property = Property::where('organization_id', $orgId)->findOrFail($id);
+        $positions = Position::where('organization_id', $orgId)->get();
+
         return view('properties.edit', compact('property', 'positions'));
     }
+
     public function update(Request $request, $id)
     {
-        // Logic to update an existing property
+        $orgId = auth()->user()->organization_id;
+
         $data = $request->validate([
             'name' => 'required|string|max:255',
             'position_id' => 'required|exists:positions,id',
             'address' => 'nullable|string|max:255',
         ]);
 
-        $data['organization_id'] = auth()->id();
-
-        $property = Property::findOrFail($id);
+        $property = Property::where('organization_id', $orgId)->findOrFail($id);
         $property->update($data);
 
         return redirect()->route('properties.index')->with('success', 'Property updated successfully.');
     }
+
     public function destroy($id)
     {
-        // Logic to delete a property
-        $property = Property::findOrFail($id);
+        $orgId = auth()->user()->organization_id;
+        $property = Property::where('organization_id', $orgId)->findOrFail($id);
         $property->delete();
 
         return redirect()->route('properties.index')->with('success', 'Property deleted successfully.');

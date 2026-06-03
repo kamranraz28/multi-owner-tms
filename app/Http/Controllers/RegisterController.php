@@ -20,7 +20,6 @@ class RegisterController extends Controller
         $planId = $request->query('plan');
         $selectedPlan = $planId ? Plan::find($planId) : null;
 
-//        dd($selectedPlan);
         return view('auth.register', compact('selectedPlan'));
     }
 

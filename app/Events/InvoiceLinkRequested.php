@@ -9,13 +9,10 @@ class InvoiceLinkRequested
 {
     use Dispatchable, SerializesModels;
 
-    public function __construct()
-    {
-        // No data needed
     public $tenants;
-    public function __construct($tenants)
+
+    public function __construct($tenants = null)
     {
-        // No data needed
         $this->tenants = $tenants;
     }
 }

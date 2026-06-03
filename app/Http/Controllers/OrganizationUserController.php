@@ -10,8 +10,8 @@ class OrganizationUserController extends Controller
 {
     public function index()
     {
-        $auth_user = auth()->id();
-        $organizationUsers = OrganizationUser::where('user_id', $auth_user)->get();
+        $orgId = auth()->user()->organization_id;
+        $organizationUsers = OrganizationUser::where('organization_id', $orgId)->get();
 
         return view('organizationUsers.index', compact('organizationUsers'));
     }
@@ -35,7 +35,7 @@ class OrganizationUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'mobile' => $request->mobile,
-            'organization_id' => auth()->user()->id,
+            'organization_id' => auth()->user()->organization_id,
             'user_id' => auth()->user()->id,
             'role_id' => $request->role_id,
             'is_active' => $request->is_active,

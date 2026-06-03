@@ -121,8 +121,9 @@
                             Sign In
                         </button>
 
-                        <p class="text-muted mb-0">Forgot password?
-                            <a href="{{ route('resetPassord') }}">Reset</a>
+                        <p class="text-white mb-0">
+                            <a href="{{ route('register') }}" class="text-white">Sign Up</a> |
+                            <a href="{{ route('resetPassord') }}" class="text-white">Reset</a>
                         </p>
                     </form>
                 </div>
