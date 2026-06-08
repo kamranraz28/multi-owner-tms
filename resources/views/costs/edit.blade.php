@@ -4,24 +4,6 @@
 
 @section('content')
 
-@if(session('success'))
-    <div class="alert alert-success alert-dismissible fade show d-flex justify-content-between align-items-center" role="alert" style="animation: fadeInDown 0.5s;">
-        <span>{{ session('success') }}</span>
-        <button type="button" class="btn" data-bs-dismiss="alert" aria-label="Close">
-            <i class="fas fa-times"></i>
-        </button>
-    </div>
-@endif
-
-@if(session('error'))
-    <div class="alert alert-danger alert-dismissible fade show d-flex justify-content-between align-items-center" role="alert" style="animation: fadeInDown 0.5s;">
-        <span>{{ session('error') }}</span>
-        <button type="button" class="btn" data-bs-dismiss="alert" aria-label="Close">
-            <i class="fas fa-times"></i>
-        </button>
-    </div>
-@endif
-
 <div class="common-container container mt-4 p-4 shadow rounded bg-white">
 
     <h2 class="text-center mb-5 fw-bold">Edit Cost</h2>

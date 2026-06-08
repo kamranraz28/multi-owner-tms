@@ -7,12 +7,6 @@
     <div class="container mt-4">
         <h2 class="text-center mb-4" style="font-weight: 700; letter-spacing: 1px; color: #333;">Organization Users</h2>
 
-        @if(session('success'))
-            <div class="alert alert-success animate__animated animate__fadeInDown">
-                {{ session('success') }}
-            </div>
-        @endif
-
         <div class="d-flex justify-content-end mb-4">
             <a class="btn btn-primary shadow-sm animate__animated animate__fadeInRight"
                href="{{ route('organizationUser.create') }}"

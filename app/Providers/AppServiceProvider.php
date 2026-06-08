@@ -5,7 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Notification; 
+use App\Models\Notification;
 use Carbon\Carbon;
 use Sentry\SentrySdk;
 use Sentry\State\Scope;
@@ -44,16 +44,29 @@ class AppServiceProvider extends ServiceProvider
                 $sidebarColor = $settings->sidebar_color ?? '#ffffff';
                 $buttonColor = $settings->button_color ?? '#ffffff';
 
+                $logoUrl = null;
+                $extensions = ['png', 'jpg', 'jpeg', 'gif', 'svg', 'webp'];
+                foreach ($extensions as $ext) {
+                    if (\Illuminate\Support\Facades\Storage::disk('public')->exists('img/softwareLogo.' . $ext)) {
+                        $logoUrl = asset('storage/img/softwareLogo.' . $ext);
+                        break;
+                    }
+                }
                 // Share the notifications and headerColor with all views
+                $hasActivePlan = false;
+                if (auth()->check()) {
+                    $org = auth()->user()->organization;
+                    $hasActivePlan = $org && $org->activeSubscription ? true : false;
+                }
+
                 $view->with([
                     'notifications' => $notifications,
                     'headerColor' => $headerColor,
                     'sidebarColor' => $sidebarColor,
                     'buttonColor' => $buttonColor,
+                    'appLogo' => $logoUrl,
+                    'hasActivePlan' => $hasActivePlan,
                 ]);
             });
         }
-
-
-
 }

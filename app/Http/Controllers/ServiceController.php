@@ -3,13 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Models\Service;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
 
 class ServiceController extends Controller
 {
     public function index()
     {
+        $authId = auth()->id();
         $orgId = auth()->user()->organization_id;
+
+        $transitionStatus = Transaction::where('user_id', $authId)
+            ->where('organization_id', $orgId)
+            ->whereIn('status', ['approved', 'pending'])
+            ->value('id');
+
+//        dd($transitionStatus);
+
         $services = Service::where('organization_id', $orgId)->get();
 
         return view('services.index', compact('services'));

@@ -111,13 +111,6 @@
 
     <h2>Roles</h2>
 
-    @if(session('success'))
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        {{ session('success') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-    @endif
-
     <div class="d-flex justify-content-end mb-4">
         <a class="btn btn-primary shadow" href="{{ route('roles.create') }}">
             <i class="fas fa-plus me-2"></i> Create Role

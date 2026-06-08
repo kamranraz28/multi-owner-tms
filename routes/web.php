@@ -18,6 +18,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\OrganizationUserController;
 use App\Http\Controllers\PlanController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\RegisterController;
 
 Route::get('', function () {
@@ -54,10 +55,10 @@ Route::get('/invoices/{tenant}', [InvoiceController::class, 'show'])->name('invo
 Route::get('/tenant/{tenant}/invoice/pdf', [InvoiceController::class, 'downloadPdf'])->name('tenant.invoice.pdf');
 
 
-Route::middleware(['auth', 'preventBackAfterLogout'])->group(function () {
+Route::middleware(['auth', 'preventBackAfterLogout','plan.limit'])->group(function () {
     // Protected routes
-    Route::get('/dashboard', [UserController::class, 'dashboard'])->name('users.dashboard');
-    Route::post('/subscribe/{plan}', [PlanController::class, 'subscribe'])->name('subscribe');
+    Route::get('/dashboard', [UserController::class, 'dashboard'])->name('users.dashboard')->withoutMiddleware('plan.limit');
+    Route::match(['get', 'post'], '/subscribe/{plan}', [PlanController::class, 'subscribe'])->name('subscribe')->withoutMiddleware('plan.limit');
 
     // For assigning roles to users
     Route::post('/assign-role', [RoleController::class, 'assignRole'])->name('assign.role');
@@ -69,11 +70,11 @@ Route::middleware(['auth', 'preventBackAfterLogout'])->group(function () {
     Route::post('/user-destroy/{id}', [UserController::class, 'destroy'])->name('users.destroy');
     Route::put('/user-update/{id}', [UserController::class, 'update'])->name('users.update');
 
-    Route::get('/user-logout', [LoginController::class, 'userLogout'])->name('userLogout');
-    Route::get('/user-profile', [UserController::class, 'viewProfile'])->name('viewProfie');
-    Route::post('updateProfile', [UserController::class, 'updateProfile'])->name('updateProfile');
+    Route::get('/user-logout', [LoginController::class, 'userLogout'])->name('userLogout')->withoutMiddleware('plan.limit');
+    Route::get('/user-profile', [UserController::class, 'viewProfile'])->name('viewProfie')->withoutMiddleware('plan.limit');
+    Route::post('updateProfile', [UserController::class, 'updateProfile'])->name('updateProfile')->withoutMiddleware('plan.limit');
 
-    Route::get('/clear-all', [UserController::class, 'clearAll'])->name('clearAll');
+    Route::get('/clear-all', [UserController::class, 'clearAll'])->name('clearAll')->withoutMiddleware('plan.limit');
 
 
     Route::get('/roles', [RoleController::class, 'index'])->name('roles.index');
@@ -90,10 +91,10 @@ Route::middleware(['auth', 'preventBackAfterLogout'])->group(function () {
     Route::post('/permissions-destroy/{id}', [PermissionController::class, 'destroy'])->name('permissions.destroy');
     Route::put('/permissions-update/{id}', [PermissionController::class, 'update'])->name('permissions.update');
 
-    Route::get('/logo-view', [UserController::class, 'logoChangeView'])->name('logoChangeView');
-    Route::post('/logo-update', [UserController::class, 'logoUpdate'])->name('updateLogo');
-    Route::get('/color-view', [UserController::class, 'colorChangeView'])->name('colorChangeView');
-    Route::post('/color-update', [UserController::class, 'updateColors'])->name('updateColors');
+    Route::get('/logo-view', [UserController::class, 'logoChangeView'])->name('logoChangeView')->withoutMiddleware('plan.limit');
+    Route::post('/logo-update', [UserController::class, 'logoUpdate'])->name('updateLogo')->withoutMiddleware('plan.limit');
+    Route::get('/color-view', [UserController::class, 'colorChangeView'])->name('colorChangeView')->withoutMiddleware('plan.limit');
+    Route::post('/color-update', [UserController::class, 'updateColors'])->name('updateColors')->withoutMiddleware('plan.limit');
 
     Route::prefix('services')->name('services.')->group(function () {
         Route::get('/', [ServiceController::class, 'index'])->name('index');
@@ -174,10 +175,23 @@ Route::middleware(['auth', 'preventBackAfterLogout'])->group(function () {
     Route::get('/tenant-payment/{tenant}/{month}', [ReportController::class, 'markPaid'])->name('tenant.payment');
     Route::get('/tenant-payment-reverse/{tenant}/{month}', [ReportController::class, 'reverse'])->name('tenant.paymentReverse');
 
+    // Admin — Transactions
+    Route::get('/transactions', [PaymentController::class, 'index'])->name('transactions.index')->withoutMiddleware('plan.limit');
+    Route::post('/transactions/{transaction}/approve', [PaymentController::class, 'approve'])->name('transactions.approve')->withoutMiddleware('plan.limit');
+    Route::post('/transactions/{transaction}/reject', [PaymentController::class, 'reject'])->name('transactions.reject')->withoutMiddleware('plan.limit');
+
 });
 
 // Plans & Subscription routes
 Route::get('/plans', [PlanController::class, 'index'])->name('plans');
+
+// Payment routes (auth required)
+Route::middleware(['auth'])->group(function () {
+    Route::get('/payment/success/{transaction}', [PaymentController::class, 'success'])->name('payment.success');
+    Route::get('/payment/failed', [PaymentController::class, 'failed'])->name('payment.failed');
+    Route::get('/payment/{plan}', [PaymentController::class, 'show'])->name('payment');
+    Route::post('/payment/{plan}', [PaymentController::class, 'store'])->name('payment.store');
+});
 
 // Public routes
 Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');

@@ -40,12 +40,6 @@
                             @csrf
                             <h4 class="mb-3 f-w-400">Reset Your Password</h4>
 
-                            @if(session('success'))
-                                <div class="alert alert-success">
-                                    {{ session('success') }}
-                                </div>
-                            @endif
-
                             <hr>
                             <div class="form-group mb-3">
                                 <input type="text" class="form-control" id="Email" name="email"

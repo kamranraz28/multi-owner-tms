@@ -9,12 +9,6 @@
 
     <h1>Create User and Assign Role</h1>
 
-    @if (session('success'))
-        <div style="color: green;">
-            {{ session('success') }}
-        </div>
-    @endif
-
     @if ($errors->any())
         <div style="color: red;">
             <ul>

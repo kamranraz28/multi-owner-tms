@@ -1,15 +1,20 @@
 <nav class="pcoded-navbar styled-sidebar" style="background-color: {{ $sidebarColor }};">
+
     <div class="navbar-wrapper">
+
         <div class="navbar-content scroll-div">
 
             {{-- User Profile Section --}}
-            <div class="main-menu-header py-3 px-3 d-flex align-items-center" style="background-color: {{ $sidebarColor }};">
+            <div class="main-menu-header py-3 px-3 d-flex align-items-center"
+                 style="background-color: {{ $sidebarColor }};">
                 @if (Auth::user()->image !== null)
-                    <img class="img-fluid rounded-circle border shadow-sm" src="{{ asset('storage/img/' . Auth::user()->image) }}"
-                        alt="User-Profile-Image" style="width: 50px; height: 50px;">
+                    <img class="img-fluid rounded-circle border shadow-sm"
+                         src="{{ asset('storage/img/' . Auth::user()->image) }}"
+                         alt="User-Profile-Image" style="width: 50px; height: 50px;">
                 @else
-                    <img class="img-fluid rounded-circle border shadow-sm" src="{{ asset('assets/images/user/avatar-2.jpg') }}"
-                        alt="User-Profile-Image" style="width: 50px; height: 50px;">
+                    <img class="img-fluid rounded-circle border shadow-sm"
+                         src="{{ asset('assets/images/user/avatar-2.jpg') }}"
+                         alt="User-Profile-Image" style="width: 50px; height: 50px;">
                 @endif
 
                 <div class="user-details ms-3">
@@ -28,8 +33,10 @@
             {{-- Dropdown Links --}}
             <div class="collapse" id="nav-user-link">
                 <ul class="list-unstyled px-3 pb-3">
-                    <li class="list-group-item bg-transparent border-0 p-0"><a href="{{ route('viewProfie') }}"><i class="feather icon-user me-2"></i>View Profile</a></li>
-                    <li class="list-group-item bg-transparent border-0 p-0"><a href="{{ route('userLogout') }}"><i class="feather icon-log-out me-2"></i>Logout</a></li>
+                    <li class="list-group-item bg-transparent border-0 p-0"><a href="{{ route('viewProfie') }}"><i
+                                class="feather icon-user me-2"></i>View Profile</a></li>
+                    <li class="list-group-item bg-transparent border-0 p-0"><a href="{{ route('userLogout') }}"><i
+                                class="feather icon-log-out me-2"></i>Logout</a></li>
                 </ul>
             </div>
 
@@ -48,44 +55,44 @@
                 </li>
 
                 @can('software_settings')
-                <li class="nav-item pcoded-hasmenu">
-                    <a href="#!" class="nav-link nav-toggle">
-                        <span class="pcoded-micon"><i class="feather icon-settings"></i></span>
-                        <span class="pcoded-mtext">Software Settings</span>
-                    </a>
-                    <ul class="pcoded-submenu submenu-animate" style="background-color: {{ $sidebarColor }};">
-                        <li><a href="{{ route('logoChangeView') }}">Application Logo</a></li>
-                        <li><a href="{{ route('colorChangeView') }}">Application Color</a></li>
-                    </ul>
-                </li>
+                    <li class="nav-item pcoded-hasmenu">
+                        <a href="#!" class="nav-link nav-toggle">
+                            <span class="pcoded-micon"><i class="feather icon-settings"></i></span>
+                            <span class="pcoded-mtext">Software Settings</span>
+                        </a>
+                        <ul class="pcoded-submenu submenu-animate" style="background-color: {{ $sidebarColor }};">
+                            <li><a href="{{ route('logoChangeView') }}">Application Logo</a></li>
+                            <li><a href="{{ route('colorChangeView') }}">Application Color</a></li>
+                        </ul>
+                    </li>
                 @endcan
 
                 @can('user_configuration')
-                <li class="nav-item pcoded-hasmenu">
-                    <a href="#!" class="nav-link nav-toggle">
-                        <span class="pcoded-micon"><i class="feather icon-layout"></i></span>
-                        <span class="pcoded-mtext">User Configuration</span>
-                    </a>
-                    <ul class="pcoded-submenu submenu-animate" style="background-color: {{ $sidebarColor }};">
-                        <li><a href="{{ route('permissions.index') }}">Permissions</a></li>
-                        <li><a href="{{ route('roles.index') }}">Roles</a></li>
-                        <li><a href="{{ route('users.index') }}">Users</a></li>
-                    </ul>
-                </li>
+                    <li class="nav-item pcoded-hasmenu">
+                        <a href="#!" class="nav-link nav-toggle">
+                            <span class="pcoded-micon"><i class="feather icon-layout"></i></span>
+                            <span class="pcoded-mtext">User Configuration</span>
+                        </a>
+                        <ul class="pcoded-submenu submenu-animate" style="background-color: {{ $sidebarColor }};">
+                            <li><a href="{{ route('permissions.index') }}">Permissions</a></li>
+                            <li><a href="{{ route('roles.index') }}">Roles</a></li>
+                            <li><a href="{{ route('users.index') }}">Users</a></li>
+                        </ul>
+                    </li>
                 @endcan
                 @can('system_configuration')
-                <li class="nav-item pcoded-hasmenu">
-                    <a href="#!" class="nav-link nav-toggle">
-                        <span class="pcoded-micon"><i class="feather icon-server"></i></span>
-                        <span class="pcoded-mtext">System Configuration</span>
-                    </a>
-                    <ul class="pcoded-submenu submenu-animate" style="background-color: {{ $sidebarColor }};">
-                        <li><a href="{{ route('services.index') }}">Services</a></li>
-                        <li><a href="{{ route('positions.index') }}">Positions</a></li>
-                        <li><a href="{{ route('properties.index') }}">Properties</a></li>
-                        <li><a href="{{ route('tenants.index') }}">Tenants</a></li>
-                    </ul>
-                </li>
+                    <li class="nav-item pcoded-hasmenu">
+                        <a href="#!" class="nav-link nav-toggle">
+                            <span class="pcoded-micon"><i class="feather icon-server"></i></span>
+                            <span class="pcoded-mtext">System Configuration</span>
+                        </a>
+                        <ul class="pcoded-submenu submenu-animate" style="background-color: {{ $sidebarColor }};">
+                            <li><a href="{{ route('services.index') }}">Services</a></li>
+                            <li><a href="{{ route('positions.index') }}">Positions</a></li>
+                            <li><a href="{{ route('properties.index') }}">Properties</a></li>
+                            <li><a href="{{ route('tenants.index') }}">Tenants</a></li>
+                        </ul>
+                    </li>
                 @endcan
 
                 <li class="nav-item">
@@ -106,6 +113,27 @@
                     </ul>
                 </li>
 
+
+                @if(!$hasActivePlan)
+                    @can('upgrade_hidden')
+                        <li class="nav-item">
+                            <a href="{{ route('plans') }}" class="nav-link">
+                                <span class="pcoded-micon"><i class="feather icon-zap"></i></span>
+                                <span class="pcoded-mtext">Upgrade Plan</span>
+                            </a>
+                        </li>
+                    @endcan
+                @endif
+
+                @can('transaction_hidden')
+                    <li class="nav-item">
+                        <a href="{{ route('transactions.index') }}" class="nav-link">
+                            <span class="pcoded-micon"><i class="feather icon-file-text"></i></span>
+                            <span class="pcoded-mtext">Transactions</span>
+                        </a>
+                    </li>
+                @endcan
+
             </ul>
         </div>
     </div>
@@ -116,6 +144,47 @@
     .styled-sidebar {
         transition: all 0.3s ease-in-out;
         box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .pcoded-navbar .ps:hover > .ps__rail-y,
+    .pcoded-navbar .ps--focus > .ps__rail-y {
+        opacity: 0;
+    }
+
+    .pcoded-navbar.navbar-collapsed:not(:hover) .main-menu-header {
+        padding: 12px 8px;
+        justify-content: center;
+    }
+
+    .pcoded-navbar.navbar-collapsed:not(:hover) .main-menu-header img {
+        width: 34px;
+        height: 34px;
+        margin: 0;
+    }
+
+    .pcoded-navbar.navbar-collapsed:not(:hover) .main-menu-header .user-details {
+        display: none;
+    }
+
+    .logo-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 72px;
+        padding: 12px 16px;
+        margin: 8px 12px;
+        background: rgba(255, 255, 255, 0.06);
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .logo-container img {
+        max-height: 52px;
+        max-width: 100%;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+        display: block;
     }
 
     .pcoded-inner-navbar > li > a {

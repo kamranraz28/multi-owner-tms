@@ -4,13 +4,6 @@
 
 @section('content')
 
-@if(session('success'))
-    <div class="alert alert-success alert-dismissible fade show text-center" role="alert" style="animation: fadeInDown 0.5s;">
-        {{ session('success') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-@endif
-
 <div class="common-container container mt-4 p-4 shadow rounded bg-white">
 
     <h2 class="fw-bold mb-4">Tenant with Services</h2>

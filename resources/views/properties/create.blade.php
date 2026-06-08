@@ -8,13 +8,6 @@
 
     <h2 class="text-center mb-4 fw-bold">Create Property</h2>
 
-    @if (session('success'))
-        <div class="alert alert-success alert-dismissible fade show text-center">
-            {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    @endif
-
     @if ($errors->any())
         <div class="alert alert-danger alert-dismissible fade show">
             <ul class="mb-0">

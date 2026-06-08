@@ -4,24 +4,6 @@
 
 @section('content')
 
-@if(session('success'))
-    <div class="alert alert-success alert-dismissible fade show d-flex justify-content-between align-items-center animate__animated animate__fadeInDown" role="alert" style="animation-duration: 0.7s;">
-        <span>{{ session('success') }}</span>
-        <button type="button" class="btn" data-bs-dismiss="alert" aria-label="Close">
-            <i class="fas fa-times"></i>
-        </button>
-    </div>
-@endif
-
-@if(session('error'))
-    <div class="alert alert-danger alert-dismissible fade show d-flex justify-content-between align-items-center animate__animated animate__fadeInDown" role="alert" style="animation-duration: 0.7s;">
-        <span>{{ session('error') }}</span>
-        <button type="button" class="btn" data-bs-dismiss="alert" aria-label="Close">
-            <i class="fas fa-times"></i>
-        </button>
-    </div>
-@endif
-
 <section class="blog-one">
     <div class="container">
         <div class="row gutter-y-30">

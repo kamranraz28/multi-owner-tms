@@ -35,6 +35,7 @@
 
     @include('layouts.js') <!-- Include your JS files here -->
     @livewireScripts
+    @include('sweetalert::alert')
 
 </body>
 

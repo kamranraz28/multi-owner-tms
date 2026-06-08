@@ -22,7 +22,7 @@ class LoginController extends Controller
             // Authenticate the user
             Auth::login($user);
 
-            return redirect()->route('users.dashboard'); // Redirect to the dashboard
+            return redirect()->intended(route('users.dashboard'));
         } else {
             return redirect()->back()->withErrors(['email' => 'Invalid credentials.']);
         }

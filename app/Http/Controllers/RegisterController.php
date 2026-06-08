@@ -41,7 +41,6 @@ class RegisterController extends Controller
                 'name' => $validated['org_name'],
                 'slug' => Str::slug($validated['org_name']) . '-' . uniqid(),
                 'email' => $validated['email'],
-                'trial_ends_at' => now()->addDays(14),
             ]);
 
             $user = User::create([
@@ -56,14 +55,40 @@ class RegisterController extends Controller
 
             if (!empty($validated['plan_id'])) {
                 $plan = Plan::findOrFail($validated['plan_id']);
-                $this->createSubscription($org, $plan);
+                $trialEndsAt = now()->addDays($plan->trial_days);
+
+                $org->update([
+                    'plan_id' => $plan->id,
+                    'trial_ends_at' => $trialEndsAt,
+                ]);
+
+                $subscription = Subscription::create([
+                    'organization_id' => $org->id,
+                    'plan_id' => $plan->id,
+                    'status' => 'trialing',
+                    'price' => $plan->price,
+                    'billing_cycle' => $plan->billing_cycle ?? 'monthly',
+                    'starts_at' => now(),
+                    'trial_ends_at' => $trialEndsAt,
+                ]);
+
+                SubscriptionHistory::create([
+                    'subscription_id' => $subscription->id,
+                    'event' => 'created',
+                    'metadata' => json_encode([
+                        'plan' => $plan->name,
+                        'type' => 'trial',
+                        'trial_days' => $plan->trial_days,
+                    ]),
+                ]);
             }
         });
 
         Auth::login($user);
 
         if (!empty($validated['plan_id'])) {
-            return redirect()->route('users.dashboard')->with('success', 'Registration complete! Welcome aboard.');
+            $plan = Plan::findOrFail($validated['plan_id']);
+            return redirect()->route('users.dashboard')->with('success', "Welcome! Your {$plan->trial_days}-day trial of {$plan->name} plan has started. Enjoy exploring all features!");
         }
 
         return redirect()->route('plans')->with('info', 'Please select a plan to get started.');
@@ -75,33 +100,5 @@ class RegisterController extends Controller
         return view('auth.choose-plan', compact('plans'));
     }
 
-    private function createSubscription(Organization $org, Plan $plan)
-    {
-        $trialDays = $plan->trial_days;
 
-        $subscription = Subscription::create([
-            'organization_id' => $org->id,
-            'plan_id' => $plan->id,
-            'status' => $trialDays > 0 ? 'trialing' : 'active',
-            'price' => $plan->price,
-            'billing_cycle' => $plan->billing_cycle ?? 'monthly',
-            'starts_at' => now(),
-            'trial_ends_at' => $trialDays > 0 ? now()->addDays($trialDays) : null,
-        ]);
-
-        $org->update([
-            'plan_id' => $plan->id,
-            'trial_ends_at' => $subscription->trial_ends_at,
-        ]);
-
-        SubscriptionHistory::create([
-            'subscription_id' => $subscription->id,
-            'event' => 'created',
-            'metadata' => json_encode([
-                'plan' => $plan->name,
-                'price' => $plan->price,
-                'trial_days' => $trialDays,
-            ]),
-        ]);
-    }
 }

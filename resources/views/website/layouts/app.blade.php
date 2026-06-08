@@ -645,6 +645,26 @@
         /* ══════════════════════════════════════
            UTILITIES
         ══════════════════════════════════════ */
+        /* Flash messages */
+        .flash-alert {
+            max-width: 1280px; margin: 20px auto 0; padding: 14px 22px;
+            border-radius: 12px; font-size: 14px; font-weight: 600;
+            display: flex; align-items: center; gap: 10px;
+            transition: opacity 0.3s, transform 0.3s;
+        }
+        .flash-alert::before {
+            content: ''; width: 20px; height: 20px; flex-shrink: 0;
+            background-size: contain; background-repeat: no-repeat; background-position: center;
+        }
+        .flash-error {
+            background: #fef2f2; border: 1.5px solid #fecaca; color: #991b1b;
+        }
+        .flash-error::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23991b1b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cline x1='15' y1='9' x2='9' y2='15'/%3E%3Cline x1='9' y1='9' x2='15' y2='15'/%3E%3C/svg%3E"); }
+        .flash-success {
+            background: #f0fdf4; border: 1.5px solid #bbf7d0; color: #166534;
+        }
+        .flash-success::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23166534' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M22 11.08V12a10 10 0 1 1-5.93-9.14'/%3E%3Cpolyline points='22 4 12 14.01 9 11.01'/%3E%3C/svg%3E"); }
+
         @media (max-width: 768px) {
             .hero { padding: 72px 20px 64px; }
             .stat-num { font-size: 26px; }
@@ -676,6 +696,12 @@
      MAIN CONTENT
 ════════════════════════════════════════════ -->
 <main>
+    @if (session('error'))
+        <div class="flash-alert flash-error">{{ session('error') }}</div>
+    @endif
+    @if (session('success'))
+        <div class="flash-alert flash-success">{{ session('success') }}</div>
+    @endif
     @yield('content')
 </main>
 
@@ -771,6 +797,11 @@
         lucide.createIcons();
     }
 
+    // Auto-dismiss flash messages
+    document.querySelectorAll('.flash-alert').forEach(el => {
+        setTimeout(() => { el.style.opacity = '0'; el.style.transform = 'translateY(-10px)'; setTimeout(() => el.remove(), 300); }, 5000);
+    });
+
     // Billing toggle
     const prices = {
         monthly: { basic: '999',   pro: '2,499',  ent: '6,999'  },
@@ -795,6 +826,8 @@
         crossed.forEach(el => { el.style.display = isYearly ? 'inline' : 'none'; });
     }
 </script>
+
+@include('sweetalert::alert')
 
 </body>
 </html>

@@ -6,9 +6,11 @@ use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserProfileRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\Notification;
+use App\Models\Organization;
 use App\Models\Property;
 use App\Models\Settings;
 use App\Models\Tenant;
+use App\Models\User;
 use App\Services\UserService;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
@@ -32,41 +34,136 @@ class UserController extends Controller
 
     public function dashboard()
     {
+        /*
+        |--------------------------------------------------------------------------
+        | Section 1: Admin Dashboard Statistics
+        |--------------------------------------------------------------------------
+        | This section calculates organization statistics for the admin dashboard.
+        |
+        | Metrics:
+        | - Total Organizations
+        | - Active Organizations
+        | - Paid Organizations (Active subscription covering current month)
+        | - Expired Subscription Organizations
+        | - Cancelled Subscription Organizations
+        | - Unpaid Organizations (Active but no subscription for current month)
+        |
+        | Note:
+        | Both paid and unpaid counts filter by current month using
+        | subscription starts_at/ends_at dates.
+        |--------------------------------------------------------------------------
+        */
+
+        // auth id find and uppercase and lowercase issue fix
+        $user = auth()->user();
+        $adminId = ($user && in_array(strtolower($user->getRoleNames()->first()), ['admin']))
+            ? $user->id
+            : null;
+
+        // Total Organization
+        $totalOrganizations = Organization::all()->count();
+
+        // Active organization
+        $totalActiveOrganizations = Organization::where('status', 1)->count();
+
+        // Paid: Organizations with active subscription covering the current month
+        $paidOrganizations = Organization::whereHas('activeSubscription', function ($query) {
+            $query->where('starts_at', '<=', now()->endOfMonth())
+                  ->where(function ($q) {
+                      $q->whereNull('ends_at')
+                        ->orWhere('ends_at', '>=', now()->startOfMonth());
+                  });
+        })->count();
+
+        // Expired subscription - new version code
+        $expiredSubscriptions = Organization::has('expiredSubscription')->count();
+
+        // Cancelled organizations - new version code
+        $cancelledOrganizations  = Organization::has('cancelledSubscription')->count();
+
+        // Unpaid: Active organizations without a subscription covering the current month
+        $unpaidOrganization = Organization::where('status', 1)
+            ->whereDoesntHave('activeSubscription', function ($query) {
+                $query->where('starts_at', '<=', now()->endOfMonth())
+                      ->where(function ($q) {
+                          $q->whereNull('ends_at')
+                            ->orWhere('ends_at', '>=', now()->startOfMonth());
+                      });
+            })->count();
+
+        $totalPayableCurrentMonth =
+
+        /*
+        |--------------------------------------------------------------------------
+        | Section 2: Organization / Owner
+        |--------------------------------------------------------------------------
+        | This function generates organization-level dashboard statistics for the
+        | owner, including tenant status, payment tracking, and financial summaries
+        | for the current month.
+        |
+        */
+
+        // Get authenticated user's organization ID
         $orgId = auth()->user()->organization_id;
+
+        // Fetch all active tenants with their related payments and services
         $tenants = Tenant::with(['payments', 'tenantServices'])
             ->where('organization_id', $orgId)
             ->where('status', 1)
             ->get();
+
+        // Total tenants in this organization
         $tenantCount = Tenant::where('organization_id', $orgId)->count();
+
+        // Count of active tenants
         $activeTenants = $tenants->count();
+
+        // Total properties under this organization
         $totalProperties = Property::where('organization_id', $orgId)->count();
 
+        // Current month in YYYY-MM format (e.g., 2026-06)
         $currentMonth = now()->format('Y-m'); // format like '2025-05'
 
-        // Active tenants who paid this month (have payment record for current month)
+        /**
+         * Get IDs of tenants who have made a payment in the current month
+         */
         $paidTenantIds = $tenants->filter(function ($tenant) use ($currentMonth) {
             return $tenant->payments->contains('payment_month', $currentMonth);
         })->pluck('id');
 
+        // Number of tenants who paid this month
         $paidTenantsCount = $paidTenantIds->count();
+
+        // Number of tenants who have not paid this month
         $unpaidTenantsCount = $activeTenants - $paidTenantsCount;
 
-        // Total payable value for all active tenants (sum of tenantServices values)
+        /**
+         * Total payable amount:
+         * Sum of all service values of active tenants
+         */
         $totalPayableValue = $tenants->sum(function ($tenant) {
             return $tenant->tenantServices->sum('value');
         });
 
-        // Total paid value (sum of tenantServices for tenants who paid)
+        /**
+         * Total paid amount:
+         * Sum of service values of tenants who have paid this month
+         */
         $totalPaidValue = $tenants->filter(function ($tenant) use ($paidTenantIds) {
             return $paidTenantIds->contains($tenant->id);
         })->sum(function ($tenant) {
             return $tenant->tenantServices->sum('value');
         });
 
+        // Remaining amount to be paid
         $totalRemainingValue = $totalPayableValue - $totalPaidValue;
 
+        // Current month in human-readable format (e.g., June 2026)
         $thisMonth = now()->format('F Y'); // Get current month name and year
 
+
+
+        // Return data to dashboard view
         return view('dashboard', compact(
             'tenants',
             'tenantCount',
@@ -77,7 +174,14 @@ class UserController extends Controller
             'totalPayableValue',
             'totalPaidValue',
             'totalRemainingValue',
-            'thisMonth'
+            'thisMonth',
+            'totalOrganizations',
+            'totalActiveOrganizations',
+            'paidOrganizations',
+            'expiredSubscriptions',
+            'cancelledOrganizations',
+            'unpaidOrganization',
+            'adminId'
         ));
     }
 

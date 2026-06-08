@@ -6909,6 +6909,8 @@ button.bg-dark:focus {
 
 .rounded-circle {
     border-radius: 50% !important;
+    width: 34px !important;
+    height: 34px !important;
 }
 
 .rounded-pill {
@@ -30176,3 +30178,5 @@ new-task label input[type=checkbox] {
 }
 
 /**====== user card css end ======**/
+
+

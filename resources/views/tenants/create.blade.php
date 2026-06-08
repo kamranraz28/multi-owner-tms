@@ -8,13 +8,6 @@
 
     <h2 class="text-center mb-5 fw-bold">Create Tenant</h2>
 
-    @if (session('success'))
-        <div class="alert alert-success alert-dismissible fade show text-center" role="alert" style="animation: fadeInDown 0.5s;">
-            {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
-
     @if ($errors->any())
         <div class="alert alert-danger shadow-sm rounded">
             <ul class="mb-0 ps-3">

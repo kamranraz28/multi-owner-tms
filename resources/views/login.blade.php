@@ -105,10 +105,6 @@
                         @csrf
                         <h4 class="mb-4 font-weight-bold">Tenant</h4>
 
-                        @if(session('error'))
-                            <div class="alert alert-danger">{{ session('error') }}</div>
-                        @endif
-
                         <div class="form-group mb-3">
                             <input type="text" class="form-control" name="email" placeholder="Email address" required>
                         </div>

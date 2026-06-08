@@ -49,7 +49,7 @@
     </style>
 
     <div class="dashboard-section">
-        <h2 class="mb-4 fw-bold animate__animated animate__fadeInDown">📊 System Overview</h2>
+        <h2 class="mb-4 fw-bold animate__animated animate__fadeInDown"><i class="fas fa-chart-bar me-2"></i> System Overview</h2>
 
         <div class="row g-3">
             <!-- Use col-md-3 for smaller boxes -->
@@ -58,12 +58,23 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
                             <div>
-                                <div class="card-title text-dark">Total Tenants</div>
-                                <div class="count-number" data-count="{{ $tenantCount }}">0</div>
+                                <div class="card-title text-dark">
+                                    @if($adminId)
+                                        Total Organizations
+                                    @else
+                                        Total Tenants
+                                    @endif
+                                </div>
+                                <div class="count-number" data-count="
+                                @if($adminId)
+                                    {{ $totalOrganizations }}
+                                @else
+                                    {{ $tenantCount }}
+                                @endif">0</div>
                             </div>
                             <div><i class="fas fa-users card-icon text-primary"></i></div>
                         </div>
-                        <p class="mt-2">All tenants registered in the system.</p>
+                        <p class="mt-2">All {{ $adminId ? 'Organizations' : 'Tenants' }} registered in the system.</p>
                     </div>
                 </div>
             </div>
@@ -73,16 +84,60 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
                             <div>
-                                <div class="card-title text-dark">Active Tenants</div>
-                                <div class="count-number" data-count="{{ $activeTenants }}">0</div>
+                                <div class="card-title text-dark">
+                                    @if($adminId)
+                                        Active Organizations
+                                    @else
+                                        Active Tenants
+                                    @endif
+                                </div>
+                                <div class="count-number" data-count="
+                                 @if($adminId)
+                                    {{ $totalActiveOrganizations }}
+                                 @else
+                                    {{ $activeTenants }}
+                                @endif">0</div>
                             </div>
                             <div><i class="fas fa-user-check card-icon text-success"></i></div>
                         </div>
-                        <p class="mt-2">Currently active tenants in the system.</p>
+                        <p class="mt-2">Currently active {{ $adminId ? 'Organizations' : 'Tenants' }} in the system.</p>
                     </div>
                 </div>
             </div>
 
+            @if($adminId)
+            <div class="col-md-3">
+                <div class="card glass-card animate__animated">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <div class="card-title text-dark">Paid Organizations ({{ $thisMonth }})</div>
+                                <div class="count-number" data-count="{{ $paidOrganizations }}">0</div>
+                            </div>
+                            <div><i class="fas fa-check-circle card-icon text-success"></i></div>
+                        </div>
+                        <p class="mt-2">Organizations with an active subscription for {{ $thisMonth }}.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card glass-card animate__animated">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <div class="card-title text-dark">Unpaid Organizations ({{ $thisMonth }})</div>
+                                <div class="count-number" data-count="{{ $unpaidOrganization }}">0</div>
+                            </div>
+                            <div><i class="fas fa-exclamation-circle card-icon text-warning"></i></div>
+                        </div>
+                        <p class="mt-2">Active organizations without an active subscription for {{ $thisMonth }}.</p>
+                    </div>
+                </div>
+            </div>
+            @endif
+
+            @if(!$adminId)
             <div class="col-md-3">
                 <div class="card glass-card animate__animated">
                     <div class="card-body">
@@ -97,7 +152,9 @@
                     </div>
                 </div>
             </div>
+            @endif
 
+            @if(!$adminId)
             <div class="col-md-3">
                 <div class="card glass-card animate__animated">
                     <div class="card-body">
@@ -112,7 +169,9 @@
                     </div>
                 </div>
             </div>
+            @endif
 
+            @if(!$adminId)
             <div class="col-md-3">
                 <div class="card glass-card animate__animated">
                     <div class="card-body">
@@ -127,6 +186,7 @@
                     </div>
                 </div>
             </div>
+            @endif
 
             <div class="col-md-3">
                 <div class="card glass-card animate__animated">

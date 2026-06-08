@@ -69,4 +69,21 @@ class Organization extends Model
     {
         return $this->hasMany(OrganizationUser::class);
     }
+
+    public function transaction()
+    {
+        return $this->hasOne(Transaction::class);
+    }
+
+    public function expiredSubscription()
+    {
+        return $this->hasOne(Subscription::class)->where('status','expired');
+    }
+
+    public function cancelledSubscription()
+    {
+        return $this->hasOne(Subscription::class)->where('status','cancelled');
+    }
+
+
 }

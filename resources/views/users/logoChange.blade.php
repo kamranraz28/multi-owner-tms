@@ -58,12 +58,6 @@
 <div class="logo-section container animate__animated animate__fadeIn">
     <h2 class="text-center fw-bold mb-5 animate__animated animate__fadeInDown">🖼️ Change Application Logo</h2>
 
-    @if (session('success'))
-        <div class="alert alert-success text-center rounded-pill shadow-sm">
-            {{ session('success') }}
-        </div>
-    @endif
-
     @if ($errors->any())
         <div class="alert alert-danger shadow-sm">
             <ul class="mb-0">

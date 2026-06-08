@@ -37,7 +37,27 @@
                         $c = $colors[$plan->slug] ?? $colors['basic'];
                     @endphp
 
-                    <div class="plan-card fu {{ $isSilver ? 'is-pro' : '' }} {{ $isGold ? 'is-ent' : '' }} d1">
+                    @php
+                        $isCurrentPlan = Auth::check() && $orgPlanId === $plan->id;
+                        $hasSubscription = Auth::check() && $subStatus !== null;
+                        $isExpiredTrial = Auth::check() && $subStatus === 'expired' && $isCurrentPlan;
+                        $cardUrl = '#';
+                        if (Auth::check()) {
+                            if ($isGold) {
+                                $cardUrl = '#';
+                            } elseif ($isExpiredTrial) {
+                                $cardUrl = route('payment', $plan);
+                            } elseif (!$isCurrentPlan) {
+                                $cardUrl = $hasSubscription ? route('payment', $plan) : route('subscribe', $plan);
+                            }
+                        } else {
+                            if (!$isGold) {
+                                $cardUrl = route('register', ['plan' => $plan->id]);
+                            }
+                        }
+                    @endphp
+                    <div class="plan-card fu {{ $isSilver ? 'is-pro' : '' }} {{ $isGold ? 'is-ent' : '' }} d1"
+                         onclick="{{ $cardUrl !== '#' ? "showPlanToast('Redirecting...'); setTimeout(function(){ window.location='$cardUrl' }, 300);" : "showPlanToast('Contact sales — coming soon')" }}" style="cursor:{{ $cardUrl !== '#' ? 'pointer' : 'default' }}">
                         @if($isSilver)
                             <div class="popular-badge">
                                 <i data-lucide="star" style="width:11px;height:11px;fill:white;"></i>
@@ -85,38 +105,90 @@
                         </div>
 
                         @auth
-                            <form method="POST" action="{{ route('subscribe', $plan) }}">
-                                @csrf
-                                <button class="btn-plan {{ $isSilver ? 'btn-plan-primary' : ($isGold ? 'btn-plan-amber' : 'btn-plan-outline') }}">
+                            @if($isCurrentPlan && $subStatus === 'active')
+                                <div class="btn-plan {{ $isSilver ? 'btn-plan-primary' : ($isGold ? 'btn-plan-amber' : 'btn-plan-outline') }}" style="text-decoration:none; display:flex; align-items:center; justify-content:center; opacity:0.6; cursor:default;">
+                                    <i data-lucide="check-circle" style="width:16px;height:16px;"></i>
+                                    Current Plan
+                                </div>
+                                <div class="btn-sub-note">Your active subscription</div>
+                            @elseif($isCurrentPlan && $subStatus === 'trialing')
+                                <div class="btn-plan {{ $isSilver ? 'btn-plan-primary' : ($isGold ? 'btn-plan-amber' : 'btn-plan-outline') }}" style="text-decoration:none; display:flex; align-items:center; justify-content:center; opacity:0.6; cursor:default;">
+                                    <i data-lucide="clock" style="width:16px;height:16px;"></i>
+                                    Trial Active
+                                </div>
+                                <div class="btn-sub-note">Your {{ $plan->trial_days }}-day trial is active</div>
+                            @elseif($isExpiredTrial)
+                                <a href="{{ route('payment', $plan) }}" class="btn-plan {{ $isSilver ? 'btn-plan-primary' : ($isGold ? 'btn-plan-amber' : 'btn-plan-outline') }}" style="text-decoration:none; display:flex; align-items:center; justify-content:center;" onclick="event.stopPropagation();">
+                                    <i data-lucide="credit-card" style="width:16px;height:16px;"></i>
+                                    Purchase — {{ $plan->name }}
+                                </a>
+                                <div class="btn-sub-note">Your trial has ended. Subscribe to continue.</div>
+                            @elseif(!$hasSubscription)
+                                <a href="{{ $isGold ? '#' : route('subscribe', $plan) }}" class="btn-plan {{ $isSilver ? 'btn-plan-primary' : ($isGold ? 'btn-plan-amber' : 'btn-plan-outline') }}" style="text-decoration:none; display:flex; align-items:center; justify-content:center;" onclick="{{ $isGold ? "showPlanToast('Contact sales — coming soon');event.stopPropagation();" : 'event.stopPropagation();' }}">
                                     @if($isGold)
                                         <i data-lucide="phone-call" style="width:16px;height:16px;"></i>
                                         Contact sales
                                     @else
-                                        <i data-lucide="zap" style="width:16px;height:16px;"></i>
-                                        Subscribe — {{ $plan->name }}
+                                        <i data-lucide="play-circle" style="width:16px;height:16px;"></i>
+                                        Start Free Trial
                                     @endif
-                                </button>
-                            </form>
-                            @if($isGold)
-                                <div class="btn-sub-note">Custom pricing available · {{ $plan->trial_days }}-day trial</div>
+                                </a>
+                                <div class="btn-sub-note">{{ $isGold ? 'Custom plans available' : ($plan->trial_days . '-day free trial · no payment needed') }}</div>
                             @else
-                                <div class="btn-sub-note">No credit card needed · Cancel anytime</div>
+                                <a href="{{ $isGold ? '#' : route('payment', $plan) }}" class="btn-plan {{ $isSilver ? 'btn-plan-primary' : ($isGold ? 'btn-plan-amber' : 'btn-plan-outline') }}" style="text-decoration:none; display:flex; align-items:center; justify-content:center;" onclick="{{ $isGold ? "showPlanToast('Contact sales — coming soon');event.stopPropagation();" : 'event.stopPropagation();' }}">
+                                    @if($isGold)
+                                        <i data-lucide="phone-call" style="width:16px;height:16px;"></i>
+                                        Contact sales
+                                    @else
+                                        <i data-lucide="credit-card" style="width:16px;height:16px;"></i>
+                                        Purchase — {{ $plan->name }}
+                                    @endif
+                                </a>
+                                <div class="btn-sub-note">{{ $isGold ? 'Custom plans available' : 'Manual payment · admin verification' }}</div>
                             @endif
                         @else
-                            <a href="{{ route('register', ['plan' => $plan->id]) }}" class="btn-plan {{ $isSilver ? 'btn-plan-primary' : ($isGold ? 'btn-plan-amber' : 'btn-plan-outline') }}" style="text-decoration:none; display:flex; align-items:center; justify-content:center;">
+                            <a href="{{ route('register', ['plan' => $plan->id]) }}" class="btn-plan {{ $isSilver ? 'btn-plan-primary' : ($isGold ? 'btn-plan-amber' : 'btn-plan-outline') }}" style="text-decoration:none; display:flex; align-items:center; justify-content:center;" onclick="event.stopPropagation();">
                                 @if($isGold)
                                     <i data-lucide="phone-call" style="width:16px;height:16px;"></i>
                                     Contact sales
                                 @else
                                     <i data-lucide="play-circle" style="width:16px;height:16px;"></i>
-                                    Start free trial
+                                    Get started
                                 @endif
                             </a>
-                            <div class="btn-sub-note">{{ $isGold ? 'Custom plans available · '.$plan->trial_days.'-day trial' : 'No credit card needed · Cancel anytime' }}</div>
+                            <div class="btn-sub-note">{{ $isGold ? 'Custom plans available' : 'Register and complete payment' }}</div>
                         @endauth
                     </div>
                 @endforeach
             </div>
         </div>
     </section>
+
+<style>
+    .plan-toast {
+        position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(80px);
+        background: var(--ink); color: #fff; padding: 14px 28px; border-radius: 14px;
+        font-size: 14px; font-weight: 600; box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+        display: flex; align-items: center; gap: 10px; z-index: 999;
+        opacity: 0; transition: all 0.4s cubic-bezier(.22,.68,0,1);
+        pointer-events: none;
+    }
+    .plan-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .plan-toast .ico { display: flex; color: var(--green); }
+</style>
+
+<div class="plan-toast" id="planToast">
+    <span class="ico"><i data-lucide="check-circle" style="width:18px;height:18px;"></i></span>
+    <span id="planToastMsg">Redirecting...</span>
+</div>
+
+<script>
+    function showPlanToast(msg) {
+        const el = document.getElementById('planToast');
+        document.getElementById('planToastMsg').textContent = msg;
+        el.classList.add('show');
+        setTimeout(() => el.classList.remove('show'), 2000);
+    }
+</script>
+
 @endsection

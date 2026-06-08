@@ -1,36 +1,35 @@
-<header class="navbar pcoded-header navbar-expand-lg navbar-light header-dark" style="background-color: {{ $headerColor }};">
-    <div class="m-header">
-        <a class="mobile-menu" id="mobile-collapse" href="#!"><span></span></a>
-        <a href="#!" class="b-brand">
-            <li>
-                <div class="dropdown drp-user">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <i class="feather icon-user"></i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right profile-notification">
-                        <div class="pro-head">
-                            @if (Auth::user()->image !== null)
-                                <img class="img-fluid rounded-circle"
-                                    src="{{ asset('storage/img/' . Auth::user()->image) }}" alt="User-Profile-Image"
-                                    style="width: 40px; height: 40px;">
-                            @else
-                                <img class="img-fluid rounded-circle" src="{{ asset('assets/images/user/avatar-2.jpg') }}"
-                                    alt="User-Profile-Image" style="width: 40px; height: 40px;">
-                            @endif
-                            <span>{{ Auth::user()->name }}</span>
-                            <a href="{{ route('userLogout') }}" class="dud-logout" title="Logout">
-                                <i class="feather icon-log-out"></i>
-                            </a>
-                        </div>
-                        <ul class="pro-body">
-                            <li><a href="{{ route('viewProfie') }}" class="dropdown-item"><i
-                                        class="feather icon-user"></i> Profile</a></li>
-                            <li><a href="{{ route('userLogout') }}" class="dropdown-item"><i
-                                        class="feather icon-lock"></i> Lock Screen</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </li>
-        </ul>
+<header class="navbar pcoded-header navbar-expand-lg navbar-light header-dark"
+        style="background-color: {{ $headerColor }}; box-shadow: 0 2px 12px rgba(0,0,0,0.12); z-index: 1025;">
+
+    <div class="d-flex align-items-center w-100 px-3">
+
+        <div class="align-items-center gap-3">
+
+            @if(!empty($appLogo))
+                <a class="d-flex align-items-center text-decoration-none" href="{{ route('users.dashboard') }}">
+                    <img src="{{ $appLogo }}" alt="App Logo" class="header-logo-img">
+                </a>
+            @endif
+        </div>
+        <a class="mobile-menu on" id="mobile-collapse" href="#!">
+            <span></span>
+        </a>
     </div>
 </header>
+
+<style>
+    .header-logo-img {
+        max-height: 40px;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+        display: block;
+        transition: transform 0.2s ease;
+    }
+    .header-logo-img:hover {
+        transform: scale(1.03);
+    }
+    .pcoded-header .dropdown-menu .dropdown-item:active {
+        background-color: #f0f0f0;
+    }
+</style>
