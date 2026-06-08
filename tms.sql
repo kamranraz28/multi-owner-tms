@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 03, 2026 at 08:28 AM
+-- Generation Time: Jun 08, 2026 at 01:39 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -137,7 +137,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (18, '2026_05_10_112023_create_organization_users_table', 1),
 (20, '2026_05_07_054532_create_plans_table', 2),
 (21, '2026_06_01_060046_create_subscriptions_table', 3),
-(22, '2026_06_01_063316_create_subscription_histories_table', 3);
+(22, '2026_06_01_063316_create_subscription_histories_table', 3),
+(23, '2026_06_07_130000_create_transactions_table', 4);
 
 -- --------------------------------------------------------
 
@@ -209,7 +210,13 @@ INSERT INTO `model_has_roles` (`role_id`, `model_type`, `model_id`) VALUES
 (4, 'App\\Models\\User', 46),
 (4, 'App\\Models\\User', 47),
 (4, 'App\\Models\\User', 48),
-(4, 'App\\Models\\User', 49);
+(4, 'App\\Models\\User', 49),
+(4, 'App\\Models\\User', 50),
+(4, 'App\\Models\\User', 51),
+(4, 'App\\Models\\User', 52),
+(4, 'App\\Models\\User', 53),
+(4, 'App\\Models\\User', 54),
+(4, 'App\\Models\\User', 55);
 
 -- --------------------------------------------------------
 
@@ -246,7 +253,9 @@ INSERT INTO `notifications` (`id`, `user_id`, `message`, `is_read`, `created_by`
 (19, 20, 'Kamran Khan created a user- potibashi123 for role- Visitor', 0, 1, NULL, 0, '2026-05-20 02:22:39', '2026-05-20 02:22:39'),
 (20, 21, 'Kamran Khan created a user- potibashi1234 for role- Visitor', 0, 1, NULL, 0, '2026-05-20 02:26:47', '2026-05-20 02:26:47'),
 (21, 22, 'Kamran Khan created a user- mribrahimkhan006 for role- organization', 0, 1, NULL, 0, '2026-05-20 02:42:20', '2026-05-20 02:42:20'),
-(22, 23, 'Kamran Khan created a user- mribrahimkhan006 for role- Visitor', 0, 1, NULL, 0, '2026-05-20 05:53:23', '2026-05-20 05:53:23');
+(22, 23, 'Kamran Khan created a user- mribrahimkhan006 for role- Visitor', 0, 1, NULL, 0, '2026-05-20 05:53:23', '2026-05-20 05:53:23'),
+(23, NULL, 'Kamran Khan created a perission- upgrade_hidden', 0, 1, NULL, 0, '2026-06-07 02:16:06', '2026-06-07 02:16:06'),
+(24, NULL, 'Kamran Khan created a perission- transaction_hidden', 0, 1, NULL, 0, '2026-06-07 04:36:05', '2026-06-07 04:36:05');
 
 -- --------------------------------------------------------
 
@@ -277,36 +286,21 @@ CREATE TABLE `organizations` (
 --
 
 INSERT INTO `organizations` (`id`, `name`, `slug`, `user_id`, `plan_id`, `phone`, `email`, `password`, `address`, `logo`, `status`, `role_id`, `trial_ends_at`, `created_at`, `updated_at`) VALUES
-(11, 'Sagor Ahmed', NULL, 1, 3, '017817147981', 'sagorahmed@gmail.com', '$2y$10$e7K25.TMM5zzJnumLo0oYOy/0kshFj/ReLouU9EGlNprIhi.PwJu.', NULL, NULL, 1, 4, '2026-07-01 05:06:49', '2026-05-11 17:43:50', '2026-06-01 05:06:49'),
-(12, 'Billal', NULL, 1, NULL, '01787147988', 'billal@gmail.com', '$2y$10$hxCNbMKuuNwJ/6b4PQlr3.yunbN5MMjr6vCVg5p0.shmWbKJSAzZm', NULL, NULL, 1, 4, NULL, '2026-05-11 18:06:23', '2026-05-11 18:06:23'),
+(11, 'Sagor Ahmed', NULL, 1, 1, '017817147981', 'sagorahmed@gmail.com', '$2y$10$e7K25.TMM5zzJnumLo0oYOy/0kshFj/ReLouU9EGlNprIhi.PwJu.', NULL, NULL, 1, 4, '2026-06-10 05:29:28', '2026-05-11 17:43:50', '2026-06-03 05:29:28'),
+(12, 'Billal', NULL, 1, 1, '01787147988', 'billal@gmail.com', '$2y$10$hxCNbMKuuNwJ/6b4PQlr3.yunbN5MMjr6vCVg5p0.shmWbKJSAzZm', NULL, NULL, 1, 4, '2026-06-14 00:12:45', '2026-05-11 18:06:23', '2026-06-07 00:12:45'),
 (13, 'Younus Shikh', NULL, 1, 1, '01971772772', 'younusshikh@gmail.com', '$2y$10$rhpBtlrwMGOO6mBikWx9ue1hgM1R0jUiqsao0d51ISOmhaXE.2PhW', NULL, NULL, 1, 4, '2026-06-09 04:47:53', '2026-05-11 18:11:41', '2026-06-02 04:47:53'),
 (14, 'Jabbir', NULL, 1, 1, '01787147933', 'Jabbir@gmail.com', '$2y$10$x7Y1VFBw.NspMd08mJQgcuOSH06UxMgXdo8kyirveFGKKuXhuhkLe', NULL, NULL, 1, 4, '2026-06-09 05:53:12', '2026-05-13 16:58:26', '2026-06-02 05:53:12'),
 (15, 'SattarPro', 'sattarpro-6a1d60cd5e21a', 24, 1, NULL, 'SakibKhan@gmail.com', NULL, NULL, NULL, 1, NULL, '2026-06-08 04:37:02', '2026-06-01 04:37:01', '2026-06-01 04:37:02'),
-(16, 'Standard Food', 'standard-food-6a1d61a3ad8e5', 25, 1, NULL, 'Ibrahimkk@gmail.com', NULL, NULL, NULL, 1, NULL, '2026-06-08 04:40:35', '2026-06-01 04:40:35', '2026-06-01 04:40:35'),
-(17, 'Astra Fuentes', 'astra-fuentes-6a1d6cad84648', 26, 1, NULL, 'cusetydi@mailinator.com', NULL, NULL, NULL, 1, NULL, '2026-06-08 05:27:41', '2026-06-01 05:27:41', '2026-06-01 05:27:41'),
-(18, 'Jasper Rowe', 'jasper-rowe-6a1d6d64d0657', 27, 1, NULL, 'lycy@mailinator.com', NULL, NULL, NULL, 1, NULL, '2026-06-08 05:30:44', '2026-06-01 05:30:44', '2026-06-01 05:30:44'),
-(19, 'Kerry Holcomb', 'kerry-holcomb-6a1d72476915d', 28, 1, NULL, 'cyryqaxiz@mailinator.com', NULL, NULL, NULL, 1, NULL, '2026-06-08 05:51:35', '2026-06-01 05:51:35', '2026-06-01 05:51:35'),
 (20, 'Salim Khondokar Villa', 'salim-khondokar-villa-6a1e6a15f1627', 29, NULL, NULL, 'salimkhondokar360@gmail.com', NULL, NULL, NULL, 1, NULL, '2026-06-15 23:28:53', '2026-06-01 23:28:53', '2026-06-01 23:28:54'),
 (21, 'Salim Khondokar Villa', 'salim-khondokar-villa-6a1e6b2d6a367', 30, NULL, NULL, 'salimkhondokar360@gmail.com', NULL, NULL, NULL, 1, NULL, '2026-06-15 23:33:33', '2026-06-01 23:33:33', '2026-06-01 23:33:33'),
 (22, 'Salim Khondokar Villa', 'salim-khondokar-villa-6a1e6b8c35e38', 31, NULL, NULL, 'salimkhondokar360@gmail.com', NULL, NULL, NULL, 1, NULL, '2026-06-15 23:35:08', '2026-06-01 23:35:08', '2026-06-01 23:35:08'),
-(23, 'Salim Khondokar Villa', 'salim-khondokar-villa-6a1e6bf77eeaa', 32, 1, NULL, 'salimkhondokar360@gmail.com', NULL, NULL, NULL, 1, NULL, '2026-06-08 23:37:26', '2026-06-01 23:36:55', '2026-06-01 23:37:26'),
-(24, 'Lawrence Freeman', 'lawrence-freeman-6a1e761fae747', 33, NULL, NULL, 'jasy@mailinator.com', NULL, NULL, NULL, 1, NULL, '2026-06-16 00:20:15', '2026-06-02 00:20:15', '2026-06-02 00:20:15'),
-(25, 'Yardley Barrera', 'yardley-barrera-6a1e76b2bb14d', 34, 1, NULL, 'feloh@mailinator.com', NULL, NULL, NULL, 1, NULL, '2026-06-09 00:22:50', '2026-06-02 00:22:42', '2026-06-02 00:22:50'),
-(26, 'Salim Khondokar Villa', 'salim-khondokar-villa-6a1e775e710f6', 35, NULL, NULL, 'salimkhondokar360@gmail.com', NULL, NULL, NULL, 1, NULL, '2026-06-16 00:25:34', '2026-06-02 00:25:34', '2026-06-02 00:25:34'),
-(27, 'Lysandra Wiley', 'lysandra-wiley-6a1e77ffdedc8', 36, 1, NULL, 'hymu@mailinator.com', NULL, NULL, NULL, 1, NULL, '2026-06-09 00:29:08', '2026-06-02 00:28:15', '2026-06-02 00:29:08'),
-(28, 'Ainsley Donovan', 'ainsley-donovan-6a1e7ae7ddb22', 37, 1, NULL, 'ryhe@mailinator.com', NULL, NULL, NULL, 1, NULL, '2026-06-09 00:40:55', '2026-06-02 00:40:39', '2026-06-02 00:40:55'),
-(29, 'Hop Bright', 'hop-bright-6a1e7dc42c394', 38, 1, NULL, 'bijoqypat@mailinator.com', NULL, NULL, NULL, 1, NULL, '2026-06-09 00:58:21', '2026-06-02 00:52:52', '2026-06-02 00:58:21'),
-(30, 'Freya Coffey', 'freya-coffey-6a1e868eb2f6d', 39, 1, NULL, 'taxejyf@mailinator.com', NULL, NULL, NULL, 1, NULL, '2026-06-09 01:30:22', '2026-06-02 01:30:22', '2026-06-02 01:30:22'),
-(31, 'Leo Singleton', 'leo-singleton-6a1e89349b0af', 40, 1, NULL, 'kuga@mailinator.com', NULL, NULL, NULL, 1, NULL, '2026-06-09 01:41:44', '2026-06-02 01:41:40', '2026-06-02 01:41:44'),
-(32, 'Deanna Mccormick', 'deanna-mccormick-6a1e8af03673e', 41, 1, NULL, 'waherez@mailinator.com', NULL, NULL, NULL, 1, NULL, '2026-06-09 01:49:07', '2026-06-02 01:49:04', '2026-06-02 01:49:07'),
-(33, 'TaShya Hale', 'tashya-hale-6a1e8cf8ed171', 42, 1, NULL, 'vaqe@mailinator.com', NULL, NULL, NULL, 1, NULL, '2026-06-09 01:58:22', '2026-06-02 01:57:44', '2026-06-02 01:58:22'),
-(34, 'Nerea Perez', 'nerea-perez-6a1e8d2e08e00', 43, 1, NULL, 'cezek@mailinator.com', NULL, NULL, NULL, 1, NULL, '2026-06-09 01:58:43', '2026-06-02 01:58:38', '2026-06-02 01:58:43'),
-(35, 'Dillon Giles', 'dillon-giles-6a1e8d8187e25', 44, 1, NULL, 'bevoziho@mailinator.com', NULL, NULL, NULL, 1, NULL, '2026-06-09 02:00:10', '2026-06-02 02:00:01', '2026-06-02 02:00:10'),
-(36, 'Garth Romero', 'garth-romero-6a1e8df0126a7', 45, 3, NULL, 'jukuret@mailinator.com', NULL, NULL, NULL, 1, NULL, '2026-07-02 02:01:56', '2026-06-02 02:01:52', '2026-06-02 02:01:56'),
-(37, 'Clementine Dunlap', 'clementine-dunlap-6a1ea7b7ad1d1', 46, NULL, NULL, 'qagujygulu@mailinator.com', NULL, NULL, NULL, 1, NULL, '2026-06-16 03:51:51', '2026-06-02 03:51:51', '2026-06-02 03:51:51'),
-(38, 'Isabella Wilson', 'isabella-wilson-6a1ea7d7f0e70', 47, 1, NULL, 'pehyvaledi@mailinator.com', NULL, NULL, NULL, 1, NULL, '2026-06-09 03:52:24', '2026-06-02 03:52:23', '2026-06-02 03:52:24'),
-(39, 'Shelly Whitney', 'shelly-whitney-6a1fb080bec7c', 48, 1, NULL, 'gijev@mailinator.com', NULL, NULL, NULL, 1, NULL, '2026-06-09 22:41:37', '2026-06-02 22:41:36', '2026-06-02 22:41:37'),
-(40, 'Mujibur Sheikh Villa', 'mujibur-sheikh-villa-6a1fb3938f92f', 49, 1, NULL, 'mujibursheikh360@gmail.com', NULL, NULL, NULL, 1, NULL, '2026-06-09 23:03:35', '2026-06-02 22:54:43', '2026-06-02 23:03:35');
+(40, 'Mujibur Sheikh Villa', 'mujibur-sheikh-villa-6a1fb3938f92f', 49, 1, NULL, 'mujibursheikh360@gmail.com', NULL, NULL, NULL, 1, NULL, NULL, '2026-06-02 22:54:43', '2026-06-08 02:46:17'),
+(41, 'Norul Hoq Soyal Vill', 'norul-hoq-soyal-vill-6a200ccac9f3c', 50, 1, NULL, 'norulhoqsoyalvill360@gmail.com', NULL, NULL, NULL, 1, NULL, '2026-06-10 05:15:27', '2026-06-03 05:15:22', '2026-06-03 05:15:27'),
+(42, 'ridis chowkidar villa', 'ridis-chowkidar-villa-6a252ca632e8f', 51, 1, NULL, 'ridischowkidar360@gmail.com', NULL, NULL, NULL, 1, NULL, '2026-06-14 04:15:19', '2026-06-07 02:32:38', '2026-06-07 04:15:19'),
+(43, 'Kadeem Gallagher', 'kadeem-gallagher-6a25413aa459c', 52, 1, NULL, 'zymuzozu@mailinator.com', NULL, NULL, NULL, 1, NULL, '2026-06-14 04:22:17', '2026-06-07 04:00:26', '2026-06-07 04:22:17'),
+(44, 'Cally Conley', 'cally-conley-6a2547327f62c', 53, NULL, NULL, 'gijipeve@mailinator.com', NULL, NULL, NULL, 1, NULL, NULL, '2026-06-07 04:25:54', '2026-06-07 04:25:54'),
+(45, 'qwdqwfd', 'qwdqwfd-6a2547e0eb58c', 54, 1, NULL, 'distributor@gmail.com', NULL, NULL, NULL, 1, NULL, NULL, '2026-06-07 04:28:48', '2026-06-07 04:29:52'),
+(46, 'Norul Hoq Soyal Villa', 'norul-hoq-soyal-villa-6a2698849ed67', 55, 1, NULL, 'norulhoqsoyalvill360@gmail.com', NULL, NULL, NULL, 1, NULL, NULL, '2026-06-08 04:25:08', '2026-06-08 05:32:07');
 
 -- --------------------------------------------------------
 
@@ -369,7 +363,9 @@ INSERT INTO `payments` (`id`, `tenant_id`, `payment_month`, `created_at`, `updat
 (9, 10, '2026-05', '2026-05-13 16:19:01', '2026-05-13 16:19:01'),
 (10, 11, '2026-05', '2026-05-13 16:49:40', '2026-05-13 16:49:40'),
 (11, 12, '2025-06', '2026-05-13 18:37:36', '2026-05-13 18:37:36'),
-(12, 12, '2026-05', '2026-05-13 20:28:12', '2026-05-13 20:28:12');
+(12, 12, '2026-05', '2026-05-13 20:28:12', '2026-05-13 20:28:12'),
+(14, 22, '2026-06', '2026-06-07 00:34:38', '2026-06-07 00:34:38'),
+(16, 15, '2026-06', '2026-06-08 03:13:25', '2026-06-08 03:13:25');
 
 -- --------------------------------------------------------
 
@@ -401,7 +397,9 @@ INSERT INTO `permissions` (`id`, `name`, `guard_name`, `created_at`, `updated_at
 (14, 'organization_user_sidebar', 'web', NULL, NULL),
 (15, 'organization_super_admin_sidebar', 'web', NULL, NULL),
 (16, 'system_configuration', 'web', NULL, NULL),
-(17, 'sidebar_reports', 'web', NULL, NULL);
+(17, 'sidebar_reports', 'web', NULL, NULL),
+(18, 'upgrade_hidden', 'web', '2026-06-07 02:16:06', '2026-06-07 02:16:06'),
+(19, 'transaction_hidden', 'web', '2026-06-07 04:36:05', '2026-06-07 04:36:05');
 
 -- --------------------------------------------------------
 
@@ -479,7 +477,9 @@ INSERT INTO `positions` (`id`, `name`, `organization_id`, `status`, `created_at`
 (3, 'East Wing', 11, 1, '2026-06-02 05:11:50', '2026-06-02 05:11:50'),
 (4, 'West Wing', 11, 1, '2026-06-02 05:11:50', '2026-06-02 05:11:50'),
 (5, 'East West', 39, 1, '2026-06-02 22:46:18', '2026-06-02 22:46:18'),
-(6, 'Eastward', 40, 1, '2026-06-02 23:03:07', '2026-06-02 23:03:07');
+(6, 'Eastward', 40, 1, '2026-06-02 23:03:07', '2026-06-02 23:03:07'),
+(7, 'Northword', 12, 1, '2026-06-07 00:19:42', '2026-06-07 00:19:42'),
+(8, 'Jorden Santana', 42, 1, '2026-06-07 04:45:02', '2026-06-07 04:45:02');
 
 -- --------------------------------------------------------
 
@@ -512,7 +512,9 @@ INSERT INTO `properties` (`id`, `position_id`, `name`, `address`, `organization_
 (9, 2, 'Ali Boyer', 'Omnis in aliqua Vol', 13, 1, '2026-06-02 04:59:38', '2026-06-02 04:59:38'),
 (10, 3, 'Flat-1', '123 Main Street, Dhaka', 11, 1, '2026-06-02 05:11:50', '2026-06-02 05:11:50'),
 (11, 4, 'Flat-2', '456 Lake Road, Dhaka', 11, 1, '2026-06-02 05:11:50', '2026-06-02 05:11:50'),
-(12, 6, 'Tin-shed house with 2 rooms', 'House No : 318 , Dasartta, Shariatpur , Dhaka , Bangladesh', 40, 1, '2026-06-02 23:15:41', '2026-06-02 23:15:41');
+(12, 6, 'Tin-shed house with 2 rooms', 'House No : 318 , Dasartta, Shariatpur , Dhaka , Bangladesh', 40, 1, '2026-06-02 23:15:41', '2026-06-02 23:15:41'),
+(14, 7, '2 Bedroom Apartments', 'Dasarta Shariatpur Dhaka Bangladesh', 12, 1, '2026-06-07 00:23:43', '2026-06-07 00:23:43'),
+(15, 8, 'Remedios Cunningham', 'Sit quibusdam quis', 42, 1, '2026-06-07 04:45:12', '2026-06-07 04:45:12');
 
 -- --------------------------------------------------------
 
@@ -557,10 +559,8 @@ CREATE TABLE `role_has_permissions` (
 INSERT INTO `role_has_permissions` (`permission_id`, `role_id`) VALUES
 (2, 2),
 (3, 2),
-(4, 1),
 (4, 2),
 (4, 3),
-(5, 1),
 (8, 1),
 (11, 1),
 (12, 1),
@@ -569,7 +569,9 @@ INSERT INTO `role_has_permissions` (`permission_id`, `role_id`) VALUES
 (16, 1),
 (16, 4),
 (17, 1),
-(17, 4);
+(17, 4),
+(18, 4),
+(19, 1);
 
 -- --------------------------------------------------------
 
@@ -606,7 +608,10 @@ INSERT INTO `services` (`id`, `name`, `organization_id`, `description`, `status`
 (21, 'WindowFix', 17, 'Window was broken', 1, '2026-05-13 17:36:48', '2026-05-13 17:36:48'),
 (22, 'Water', 13, 'Water supply management', 1, '2026-06-02 04:32:29', '2026-06-02 04:32:29'),
 (23, 'AC Repair Service', 39, 'Price of materials or parts Transportation cost for carrying new materials/parts Warranty given by manufacturer Hanging Charge 400tk ( upto 8th floor) for the outdoor unit (If applicable) Additional 400tk will be added after 8th floor', 1, '2026-06-02 22:43:08', '2026-06-02 22:43:08'),
-(24, 'Wifi Service', 40, 'The total WiFi bill is 500 BDT. This amount will be divided equally among all tenants, calculated as 500 ÷ total number of tenants.', 1, '2026-06-02 23:02:22', '2026-06-02 23:02:22');
+(24, 'Wifi Service', 40, 'The total WiFi bill is 500 BDT. This amount will be divided equally among all tenants, calculated as 500 ÷ total number of tenants.', 1, '2026-06-02 23:02:22', '2026-06-02 23:02:22'),
+(25, 'Wifi Service', 12, 'The total WiFi bill is 500 BDT. This amount will be divided equally among all tenants, calculated as 500 ÷ total number of tenants.', 1, '2026-06-03 00:40:43', '2026-06-03 00:40:43'),
+(26, 'House Rental', 12, 'A well-maintained and spacious house is available for rent in a peaceful and convenient location. The property offers comfortable living with good ventilation and natural light throughout the rooms.', 1, '2026-06-07 00:48:34', '2026-06-07 00:48:34'),
+(27, 'Sasha Massey', 42, 'Voluptatum deserunt', 1, '2026-06-07 04:44:53', '2026-06-07 04:44:53');
 
 -- --------------------------------------------------------
 
@@ -656,7 +661,9 @@ CREATE TABLE `subscriptions` (
 --
 
 INSERT INTO `subscriptions` (`id`, `organization_id`, `plan_id`, `status`, `price`, `billing_cycle`, `starts_at`, `trial_ends_at`, `ends_at`, `cancelled_at`, `created_at`, `updated_at`) VALUES
-(26, 40, 1, 'trialing', 999.00, 'monthly', '2026-06-02 23:03:35', '2026-06-09 23:03:35', NULL, NULL, '2026-06-02 23:03:35', '2026-06-02 23:03:35');
+(40, 40, 1, 'active', 999.00, 'monthly', '2026-06-08 03:31:40', NULL, NULL, NULL, '2026-06-08 03:31:40', '2026-06-08 03:31:40'),
+(41, 46, 1, 'expired', 999.00, 'monthly', '2026-06-08 04:25:29', '2026-06-07 04:25:29', NULL, NULL, '2026-06-08 04:25:29', '2026-06-08 05:32:07'),
+(42, 46, 1, 'active', 999.00, 'monthly', '2026-06-08 05:32:07', NULL, NULL, NULL, '2026-06-08 05:32:07', '2026-06-08 05:32:07');
 
 -- --------------------------------------------------------
 
@@ -678,7 +685,9 @@ CREATE TABLE `subscription_histories` (
 --
 
 INSERT INTO `subscription_histories` (`id`, `subscription_id`, `event`, `metadata`, `created_at`, `updated_at`) VALUES
-(26, 26, 'created', '\"{\\\"plan\\\":\\\"Basic\\\",\\\"trial_days\\\":7}\"', '2026-06-02 23:03:35', '2026-06-02 23:03:35');
+(40, 40, 'activated', '\"{\\\"plan\\\":\\\"Basic\\\",\\\"source\\\":\\\"manual_payment\\\",\\\"transaction_id\\\":16}\"', '2026-06-08 03:31:40', '2026-06-08 03:31:40'),
+(41, 41, 'created', '\"{\\\"plan\\\":\\\"Basic\\\",\\\"type\\\":\\\"trial\\\",\\\"trial_days\\\":7}\"', '2026-06-08 04:25:29', '2026-06-08 04:25:29'),
+(42, 42, 'activated', '\"{\\\"plan\\\":\\\"Basic\\\",\\\"source\\\":\\\"manual_payment\\\",\\\"transaction_id\\\":17}\"', '2026-06-08 05:32:07', '2026-06-08 05:32:07');
 
 -- --------------------------------------------------------
 
@@ -715,7 +724,9 @@ INSERT INTO `tenants` (`id`, `property_id`, `name`, `organization_id`, `phone`, 
 (12, 7, 'Jismin AKter', 17, '01930174730', 'Dasarta Shariatpur Dhaka Bangladesh, Dasarta Shariatpur Dhaka Bangladesh', '12345678909', 'uploads/uDINqi08W5FmDHKMnGxsgIUCp0kXJZMTgpXc4Bnt.png', 1, 1, 1, '2026-05-13 17:03:19', '2026-05-13 18:23:02'),
 (15, 10, 'Abdur Rahman', 11, '01712345678', '456 Lake Road, Dhaka', '1234567890', NULL, 1, 1, 1, '2026-06-02 05:11:50', '2026-06-02 05:11:50'),
 (16, 9, 'Ibrahim Khan', 13, '01930174750', 'Dasarta Shariatpur Dhaka Bangladesh', '3123411234', NULL, 1, 0, 1, '2026-06-02 05:12:51', '2026-06-02 05:13:07'),
-(19, 12, 'Ibrahim Khan', 40, '01930174755', 'Dasarta Shariatpur Dhaka Bangladesh', '2123411230', 'uploads/JJ9qEPd1imEmtuu6BFFhWPOCDFBgFf9EEPFu8TcN.png', 1, 1, 1, '2026-06-02 23:27:19', '2026-06-02 23:27:19');
+(19, 12, 'Ibrahim Khan', 40, '01930174755', 'Dasarta Shariatpur Dhaka Bangladesh', '2123411230', 'uploads/JJ9qEPd1imEmtuu6BFFhWPOCDFBgFf9EEPFu8TcN.png', 1, 1, 1, '2026-06-02 23:27:19', '2026-06-02 23:27:19'),
+(22, 14, 'Ali Bin Shiraj', 12, '01930174761', 'Dasarta Shariatpur Dhaka Bangladesh', '4123411287', 'uploads/DDFEzKXSUPmyCg7XIGxfta1JiVvSmKBbwlFJ5Hzz.png', 1, 1, 1, '2026-06-07 00:33:05', '2026-06-07 00:33:05'),
+(23, 15, 'Kellie Hoffman', 42, '017233-9535', 'Aut aut qui dolor et', '248', NULL, 1, 1, 1, '2026-06-07 04:45:51', '2026-06-07 04:45:51');
 
 -- --------------------------------------------------------
 
@@ -748,7 +759,40 @@ INSERT INTO `tenantservices` (`id`, `tenant_id`, `service_id`, `start_date`, `en
 (8, 11, 3, NULL, NULL, 1, 3000, '2026-05-11 22:23:13', '2026-05-11 22:23:13'),
 (9, 10, 3, NULL, NULL, 1, 3000, '2026-05-11 22:24:16', '2026-05-11 22:24:16'),
 (10, 12, 20, NULL, NULL, 1, 2500, '2026-05-13 17:08:06', '2026-05-13 17:08:06'),
-(11, 16, 22, NULL, NULL, 1, 3333, '2026-06-02 05:13:27', '2026-06-02 05:13:27');
+(11, 16, 22, NULL, NULL, 1, 3333, '2026-06-02 05:13:27', '2026-06-02 05:13:27'),
+(12, 22, 25, NULL, NULL, 1, 500, '2026-06-07 00:49:16', '2026-06-07 00:49:16'),
+(13, 22, 26, NULL, NULL, 1, 2000, '2026-06-07 00:49:42', '2026-06-07 00:49:42');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `transactions`
+--
+
+CREATE TABLE `transactions` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `user_id` bigint(20) UNSIGNED NOT NULL,
+  `organization_id` bigint(20) UNSIGNED NOT NULL,
+  `plan_id` bigint(20) UNSIGNED NOT NULL,
+  `amount` decimal(10,2) NOT NULL,
+  `payment_method` varchar(255) NOT NULL,
+  `transaction_id` varchar(255) DEFAULT NULL,
+  `status` varchar(255) NOT NULL DEFAULT 'pending',
+  `billing_data` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`billing_data`)),
+  `admin_note` text DEFAULT NULL,
+  `approved_at` timestamp NULL DEFAULT NULL,
+  `approved_by` bigint(20) UNSIGNED DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `transactions`
+--
+
+INSERT INTO `transactions` (`id`, `user_id`, `organization_id`, `plan_id`, `amount`, `payment_method`, `transaction_id`, `status`, `billing_data`, `admin_note`, `approved_at`, `approved_by`, `created_at`, `updated_at`) VALUES
+(16, 49, 40, 1, 1049.00, 'bkash', 'Iusto enim Nam hic e', 'approved', '{\"name\":\"Jamal Miranda\",\"email\":\"nugutovi@mailinator.com\",\"phone\":\"+1 (302) 432-2665\",\"city\":\"Dolorem voluptatem a\",\"address\":\"Ea a et perspiciatis\"}', NULL, '2026-06-08 03:31:40', 1, '2026-06-08 03:30:12', '2026-06-08 03:31:40'),
+(17, 55, 46, 1, 1049.00, 'bkash', 'Ab illo perspiciatis', 'approved', '{\"name\":\"Joshua Morse\",\"email\":\"panel@mailinator.com\",\"phone\":\"+1 (783) 222-6704\",\"city\":\"Voluptas ipsa quo r\",\"address\":\"Accusamus enim neces\"}', NULL, '2026-06-08 05:32:07', 1, '2026-06-08 05:18:25', '2026-06-08 05:32:07');
 
 -- --------------------------------------------------------
 
@@ -776,7 +820,8 @@ INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `or
 (1, 'Kamran Khan', 'mdkamranhosan98@gmail.com', NULL, '$2y$10$RqzKCAU8EjQga7XcATE4ZeLFr8Gv2Yc/650JTMDLh1GycxNb9mC6y', 11, NULL, '2026-05-10 22:50:34', '2026-06-01 04:56:10'),
 (15, 'Billal', 'billal@gmail.com', NULL, '$2y$10$ZaoTc7pMoXV8FII4iuCGaeHlF2lcBV.KEBzrirNGl/2lV0PRQdxB.', 12, NULL, '2026-05-11 18:06:23', '2026-05-21 00:47:00'),
 (16, 'Younus Shikh', 'younusshikh@gmail.com', NULL, '$2y$10$rhpBtlrwMGOO6mBikWx9ue1hgM1R0jUiqsao0d51ISOmhaXE.2PhW', 13, NULL, '2026-05-11 18:11:41', '2026-05-11 18:11:41'),
-(49, 'Mujibur Sheikh', 'mujibursheikh360@gmail.com', NULL, '$2y$10$.NFoC0FUg7ueyJNZR.aGxuvsf/swcEvWGurSE58i7zXQ7dN0ukNPa', 40, NULL, '2026-06-02 22:54:43', '2026-06-02 22:54:43');
+(49, 'Mujibur Sheikh', 'mujibursheikh360@gmail.com', NULL, '$2y$10$.NFoC0FUg7ueyJNZR.aGxuvsf/swcEvWGurSE58i7zXQ7dN0ukNPa', 40, NULL, '2026-06-02 22:54:43', '2026-06-02 22:54:43'),
+(55, 'Norul Hoq Soyal', 'norulhoqsoyalvill360@gmail.com', NULL, '$2y$10$FnTzf7.6B1dIDnx9N/aFVep6paqtVJJkrghFk8t/OD62606ZT23oS', 46, NULL, '2026-06-08 04:25:08', '2026-06-08 04:25:08');
 
 --
 -- Indexes for dumped tables
@@ -942,6 +987,16 @@ ALTER TABLE `tenantservices`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `transactions`
+--
+ALTER TABLE `transactions`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `transactions_user_id_foreign` (`user_id`),
+  ADD KEY `transactions_organization_id_foreign` (`organization_id`),
+  ADD KEY `transactions_plan_id_foreign` (`plan_id`),
+  ADD KEY `transactions_approved_by_foreign` (`approved_by`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -974,19 +1029,19 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `notifications`
 --
 ALTER TABLE `notifications`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `organizations`
 --
 ALTER TABLE `organizations`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 
 --
 -- AUTO_INCREMENT for table `organization_users`
@@ -998,13 +1053,13 @@ ALTER TABLE `organization_users`
 -- AUTO_INCREMENT for table `payments`
 --
 ALTER TABLE `payments`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `permissions`
 --
 ALTER TABLE `permissions`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `personal_access_tokens`
@@ -1022,13 +1077,13 @@ ALTER TABLE `plans`
 -- AUTO_INCREMENT for table `positions`
 --
 ALTER TABLE `positions`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `properties`
 --
 ALTER TABLE `properties`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `roles`
@@ -1040,7 +1095,7 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT for table `services`
 --
 ALTER TABLE `services`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `settings`
@@ -1052,31 +1107,37 @@ ALTER TABLE `settings`
 -- AUTO_INCREMENT for table `subscriptions`
 --
 ALTER TABLE `subscriptions`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
 -- AUTO_INCREMENT for table `subscription_histories`
 --
 ALTER TABLE `subscription_histories`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
 -- AUTO_INCREMENT for table `tenants`
 --
 ALTER TABLE `tenants`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `tenantservices`
 --
 ALTER TABLE `tenantservices`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+
+--
+-- AUTO_INCREMENT for table `transactions`
+--
+ALTER TABLE `transactions`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
 
 --
 -- Constraints for dumped tables
@@ -1119,6 +1180,15 @@ ALTER TABLE `subscriptions`
 --
 ALTER TABLE `subscription_histories`
   ADD CONSTRAINT `subscription_histories_subscription_id_foreign` FOREIGN KEY (`subscription_id`) REFERENCES `subscriptions` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `transactions`
+--
+ALTER TABLE `transactions`
+  ADD CONSTRAINT `transactions_approved_by_foreign` FOREIGN KEY (`approved_by`) REFERENCES `users` (`id`),
+  ADD CONSTRAINT `transactions_organization_id_foreign` FOREIGN KEY (`organization_id`) REFERENCES `organizations` (`id`),
+  ADD CONSTRAINT `transactions_plan_id_foreign` FOREIGN KEY (`plan_id`) REFERENCES `plans` (`id`),
+  ADD CONSTRAINT `transactions_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
