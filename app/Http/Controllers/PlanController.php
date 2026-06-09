@@ -31,6 +31,10 @@ class PlanController extends Controller
             return redirect()->route('payment', $plan);
         }
 
+        if ($org->subscriptions()->exists()) {
+            return redirect()->route('payment', $plan)->with('info', 'You already used a trial. Please purchase directly.');
+        }
+
         $trialEndsAt = now()->addDays($plan->trial_days);
 
         DB::transaction(function () use ($org, $plan, $trialEndsAt) {
@@ -79,6 +83,8 @@ class PlanController extends Controller
         $orgPlanId = null;
         $subStatus = null;
 
+        $hasPreviousSubscription = false;
+
         if (auth()->check()) {
             $org = auth()->user()->organization;
             if ($org) {
@@ -90,9 +96,10 @@ class PlanController extends Controller
                         $subStatus = 'expired';
                     }
                 }
+                $hasPreviousSubscription = $org->subscriptions()->exists();
             }
         }
 
-        return view('website.plans.index', compact('plans', 'orgPlanId', 'subStatus'));
+        return view('website.plans.index', compact('plans', 'orgPlanId', 'subStatus', 'hasPreviousSubscription'));
     }
 }

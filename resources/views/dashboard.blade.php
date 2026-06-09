@@ -188,21 +188,41 @@
             </div>
             @endif
 
+            @if($adminId)
+            <div class="col-md-3">
+                <div class="card glass-card animate__animated">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <div class="card-title text-dark">Total Payable </div>
+                                <div class="count-number" data-count="{{ $totalPayable ?? 0 }}">0</div>
+                            </div>
+                            <div><i class="fas fa-money-bill-wave card-icon text-info"></i></div>
+                        </div>
+                        <p class="mt-2">Total amount expected from active organization.</p>
+                    </div>
+                </div>
+            </div>
+            @endif
+
+            @if($adminId)
             <div class="col-md-3">
                 <div class="card glass-card animate__animated">
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
                             <div>
                                 <div class="card-title text-dark">Total Payable ({{ $thisMonth }})</div>
-                                <div class="count-number" data-count="{{ $totalPayableValue ?? 0 }}">0</div>
+                                <div class="count-number" data-count="{{ $currentMonthTotalPayable ?? 0 }}">0</div>
                             </div>
                             <div><i class="fas fa-money-bill-wave card-icon text-info"></i></div>
                         </div>
-                        <p class="mt-2">Total amount expected from active tenants {{ $thisMonth }}.</p>
+                        <p class="mt-2">Total amount expected from organization {{ $thisMonth }}.</p>
                     </div>
                 </div>
             </div>
+            @endif
 
+            @if(!$adminId)
             <div class="col-md-3">
                 <div class="card glass-card animate__animated">
                     <div class="card-body">
@@ -217,7 +237,10 @@
                     </div>
                 </div>
             </div>
+            @endif
 
+
+            @if(!$adminId)
             <div class="col-md-3">
                 <div class="card glass-card animate__animated">
                     <div class="card-body">
@@ -232,6 +255,24 @@
                     </div>
                 </div>
             </div>
+            @endif
+
+            @if($adminId)
+            <div class="col-md-3">
+                <div class="card glass-card animate__animated">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <div class="card-title text-dark">Subscriptions Expired</div>
+                                <div class="count-number" data-count="{{ $expiredSubscriptions ?? 0 }}">0</div>
+                            </div>
+                            <div><i class="fas fa-hourglass-half card-icon text-danger"></i></div>
+                        </div>
+                        <p class="mt-2">Expired organization subscriptions.</p>
+                    </div>
+                </div>
+            </div>
+            @endif
 
         </div>
     </div>

@@ -9,9 +9,11 @@ use App\Models\Notification;
 use App\Models\Organization;
 use App\Models\Property;
 use App\Models\Settings;
+use App\Models\Subscription;
 use App\Models\Tenant;
 use App\Models\User;
 use App\Services\UserService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 
@@ -76,7 +78,9 @@ class UserController extends Controller
         })->count();
 
         // Expired subscription - new version code
-        $expiredSubscriptions = Organization::has('expiredSubscription')->count();
+        $expiredSubscriptions = Organization::has('expiredSubscription')
+            ->doesntHave('activeSubscription')
+            ->count();
 
         // Cancelled organizations - new version code
         $cancelledOrganizations  = Organization::has('cancelledSubscription')->count();
@@ -91,7 +95,159 @@ class UserController extends Controller
                       });
             })->count();
 
-        $totalPayableCurrentMonth =
+
+        // totalPayable  ====================
+        // ১. যেসব org এর এই মাসে active subscription আছে → সম্পূর্ণ বাদ
+        $activeOrgIds = Subscription::where('status', 'active')
+            ->pluck('organization_id')
+            ->unique()
+            ->toArray();
+
+        // ২. যেসব org এর active নেই কিন্তু আগে subscription ছিল
+        //    → প্রতিটির সর্বশেষ non-active subscription এর price নাও
+        $nonActiveOrgs = Subscription::whereNotIn('organization_id', $activeOrgIds)
+            ->whereIn('status', ['expired', 'trialing', 'cancelled'])
+            ->select('organization_id')
+            ->distinct()
+            ->pluck('organization_id');
+
+        $latestNonActiveTotal = 0;
+        $latestNonActiveRows  = [];
+
+        foreach ($nonActiveOrgs as $orgId) {
+            $latest = Subscription::where('organization_id', $orgId)
+                ->whereIn('status', ['expired', 'trialing', 'cancelled'])
+                ->orderBy('created_at', 'desc')
+                ->first();
+
+            if ($latest) {
+                // শুধু প্রথমবার trialing হলে আলাদা group এ যাবে (নিচে handle হবে)
+                // এখানে শুধু expired/cancelled নাও
+                if (in_array($latest->status, ['expired', 'cancelled'])) {
+                    $latestNonActiveTotal += $latest->price;
+                    $latestNonActiveRows[] = $latest;
+                }
+            }
+        }
+
+        // ৩. যারা প্রথমবার trialing (আগে কোনো expired/cancelled/active নেই)
+        $firstTimeTrialingOrgs = Subscription::where('status', 'trialing')
+            ->whereNotIn('organization_id', $activeOrgIds)
+            ->whereNotIn('organization_id', function ($query) {
+                $query->select('organization_id')
+                    ->from('subscriptions')
+                    ->whereIn('status', ['expired', 'cancelled', 'active']);
+            })
+            ->select('organization_id')
+            ->distinct()
+            ->pluck('organization_id');
+
+        $firstTimeTrialingTotal = 0;
+        $firstTimeTrialingRows  = [];
+
+        foreach ($firstTimeTrialingOrgs as $orgId) {
+            $trial = Subscription::where('organization_id', $orgId)
+                ->where('status', 'trialing')
+                ->orderBy('created_at', 'desc')
+                ->first();
+
+            if ($trial) {
+                $firstTimeTrialingTotal += $trial->price;
+                $firstTimeTrialingRows[] = $trial;
+            }
+        }
+        $totalPayable = $latestNonActiveTotal + $firstTimeTrialingTotal;
+
+
+
+
+        // total payable current month
+        // =========================================
+        // Total Payable Current Month
+        // =========================================
+
+        $currentMonth = Carbon::now()->month;
+        $currentYear  = Carbon::now()->year;
+
+        // ১. Current month এ active subscription আছে এমন org
+        $currentMonthActiveOrgIds = Subscription::where('status', 'active')
+            ->whereMonth('created_at', $currentMonth)
+            ->whereYear('created_at', $currentYear)
+            ->pluck('organization_id')
+            ->unique()
+            ->toArray();
+
+        // ২. Active নেই কিন্তু current month এ expired/trialing/cancelled আছে
+        $currentMonthNonActiveOrgs = Subscription::whereNotIn('organization_id', $currentMonthActiveOrgIds)
+            ->whereIn('status', ['expired', 'trialing', 'cancelled'])
+            ->whereMonth('created_at', $currentMonth)
+            ->whereYear('created_at', $currentYear)
+            ->select('organization_id')
+            ->distinct()
+            ->pluck('organization_id');
+
+        $currentMonthLatestNonActiveTotal = 0;
+        $currentMonthLatestNonActiveRows  = [];
+
+        foreach ($currentMonthNonActiveOrgs as $orgId) {
+
+            $currentMonthLatest = Subscription::where('organization_id', $orgId)
+                ->whereIn('status', ['expired', 'trialing', 'cancelled'])
+                ->whereMonth('created_at', $currentMonth)
+                ->whereYear('created_at', $currentYear)
+                ->latest()
+                ->first();
+
+            if ($currentMonthLatest) {
+
+                if (in_array($currentMonthLatest->status, ['expired', 'cancelled'])) {
+
+                    $currentMonthLatestNonActiveTotal += $currentMonthLatest->price;
+
+                    $currentMonthLatestNonActiveRows[] = $currentMonthLatest;
+                }
+            }
+        }
+
+        // ৩. First Time Trialing (Current Month)
+        $currentMonthFirstTimeTrialingOrgs = Subscription::where('status', 'trialing')
+            ->whereNotIn('organization_id', $currentMonthActiveOrgIds)
+            ->whereMonth('created_at', $currentMonth)
+            ->whereYear('created_at', $currentYear)
+            ->whereNotIn('organization_id', function ($query) {
+                $query->select('organization_id')
+                    ->from('subscriptions')
+                    ->whereIn('status', ['expired', 'cancelled', 'active']);
+            })
+            ->select('organization_id')
+            ->distinct()
+            ->pluck('organization_id');
+
+        $currentMonthFirstTimeTrialingTotal = 0;
+        $currentMonthFirstTimeTrialingRows  = [];
+
+        foreach ($currentMonthFirstTimeTrialingOrgs as $orgId) {
+
+            $currentMonthTrial = Subscription::where('organization_id', $orgId)
+                ->where('status', 'trialing')
+                ->whereMonth('created_at', $currentMonth)
+                ->whereYear('created_at', $currentYear)
+                ->latest()
+                ->first();
+
+            if ($currentMonthTrial) {
+
+                $currentMonthFirstTimeTrialingTotal += $currentMonthTrial->price;
+
+                $currentMonthFirstTimeTrialingRows[] = $currentMonthTrial;
+            }
+        }
+
+        // Final Current Month Total Payable
+        $currentMonthTotalPayable =
+            $currentMonthLatestNonActiveTotal +
+            $currentMonthFirstTimeTrialingTotal;
+//        dd($currentMonthTotalPayable);
 
         /*
         |--------------------------------------------------------------------------
@@ -181,7 +337,9 @@ class UserController extends Controller
             'expiredSubscriptions',
             'cancelledOrganizations',
             'unpaidOrganization',
-            'adminId'
+            'adminId',
+            'totalPayable',
+            'currentMonthTotalPayable'
         ));
     }
 
@@ -274,9 +432,7 @@ class UserController extends Controller
         $settings->sidebar_color = $request->input('sidebarColor');
         $settings->button_color = $request->input('buttonColor');
         $settings->save();
-
         return back()->with('success', 'Colors updated successfully!');
     }
-
 
 }

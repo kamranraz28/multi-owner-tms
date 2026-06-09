@@ -6,10 +6,7 @@
 @php
     $isSilver = $plan->slug === 'silver';
     $isGold = $plan->slug === 'gold';
-    $vatRate = 0.05;
-    $subtotal = $plan->price;
-    $vat = round($subtotal * $vatRate);
-    $total = $subtotal + $vat;
+    $total = $plan->price;
     $icons = ['basic' => 'home', 'silver' => 'building-2', 'gold' => 'landmark'];
     $planIcon = $icons[$plan->slug] ?? 'home';
     $iconBg = $isSilver ? '#eff6ff' : ($isGold ? '#fffbeb' : '#f1f5f9');
@@ -364,14 +361,6 @@
                 </div>
             </div>
 
-            <div class="sidebar-row">
-                <span class="label">Subtotal</span>
-                <span class="value">৳{{ number_format($subtotal) }}</span>
-            </div>
-            <div class="sidebar-row">
-                <span class="label">VAT (5%)</span>
-                <span class="value">৳{{ number_format($vat) }}</span>
-            </div>
             <div class="sidebar-row total">
                 <span>Total</span>
                 <span style="color:var(--brand);">৳{{ number_format($total) }}</span>

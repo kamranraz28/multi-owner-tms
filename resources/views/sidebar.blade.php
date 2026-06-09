@@ -114,7 +114,7 @@
                 </li>
 
 
-                @if(!$hasActivePlan)
+                @if(!$hasActivePlan || $isTrialing)
                     @can('upgrade_hidden')
                         <li class="nav-item">
                             <a href="{{ route('plans') }}" class="nav-link">

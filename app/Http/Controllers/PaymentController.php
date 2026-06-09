@@ -40,10 +40,7 @@ class PaymentController extends Controller
             'address' => 'nullable|string|max:500',
         ]);
 
-        $vatRate = 0.05;
-        $subtotal = $plan->price;
-        $vat = round($subtotal * $vatRate);
-        $total = $subtotal + $vat;
+        $total = $plan->price;
 
         $existingPendingApproved = Transaction::where('organization_id', $org->id)
             ->where('status', ['pending', 'approved'])

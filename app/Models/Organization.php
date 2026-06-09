@@ -57,7 +57,7 @@ class Organization extends Model
 
     public function activeSubscription()
     {
-        return $this->hasOne(Subscription::class)->whereIn('status', ['trialing', 'active']);
+        return $this->hasOne(Subscription::class)->whereIn('status', ['trialing', 'active'])->latest('id');
     }
 
     public function owner()
@@ -77,7 +77,13 @@ class Organization extends Model
 
     public function expiredSubscription()
     {
-        return $this->hasOne(Subscription::class)->where('status','expired');
+        return $this->hasOne(Subscription::class)->where(function ($q) {
+            $q->where('status', 'expired')
+              ->orWhere(function ($q2) {
+                  $q2->whereNotNull('ends_at')
+                     ->where('ends_at', '<', now());
+              });
+        });
     }
 
     public function cancelledSubscription()

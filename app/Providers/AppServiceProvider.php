@@ -54,9 +54,12 @@ class AppServiceProvider extends ServiceProvider
                 }
                 // Share the notifications and headerColor with all views
                 $hasActivePlan = false;
+                $isTrialing = false;
                 if (auth()->check()) {
                     $org = auth()->user()->organization;
-                    $hasActivePlan = $org && $org->activeSubscription ? true : false;
+                    $sub = $org ? $org->activeSubscription : null;
+                    $hasActivePlan = $sub && $sub->status === 'active' ? true : false;
+                    $isTrialing = $sub && $sub->status === 'trialing' ? true : false;
                 }
 
                 $view->with([
@@ -66,6 +69,7 @@ class AppServiceProvider extends ServiceProvider
                     'buttonColor' => $buttonColor,
                     'appLogo' => $logoUrl,
                     'hasActivePlan' => $hasActivePlan,
+                    'isTrialing' => $isTrialing,
                 ]);
             });
         }
